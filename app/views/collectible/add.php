@@ -1,8 +1,25 @@
 <?php $this->view("header"); ?>
 
-<h2>add collectible</h2>
+<h2>add <?=$collectible?></h2>
 
-<p>This page should allow the user to add a new collectible.</p>
+<div class="help">
+ <p>This page allows you to add a new collectible.</p>
+</div>
+
+<?=form_open("collectible/add/$collectible")?>
+
+<?=validation_errors()?>
+
+<?php foreach ($fields as $field): if ($field->name != 'id'): ?>
+<p>
+ <label><?=preg_replace('/_/', ' ', $field->name)?></label><br/>
+ <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?>/>
+</p>
+<?php endif; endforeach; ?>
+
+<input type="submit" value="save"/>
+
+</form>
 
 <?php $this->view("footer"); ?>
 

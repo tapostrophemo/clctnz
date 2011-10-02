@@ -3,7 +3,8 @@
 class Site extends CI_Controller
 {
   function index() {
-    $this->load->view('menu');
+    $tables = $this->db->list_tables();
+    $this->load->view('menu', array('collectibles' => $tables));
   }
 }
 

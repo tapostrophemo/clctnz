@@ -4,10 +4,16 @@ class Collectible extends CI_Controller
 {
   function define() {
     if (!$this->form_validation->run('collectible_define')) {
+      // TODO: more validation:
+      // - "id" is reserved name
+      // - must have unique attribute names
+      // - must have at least 1st attribute name
+      // - must have equal numbers of names/types
+      // - validate selected types are allowed
       $this->load->view('collectible/define');
     }
     else {
-      $tableName = strtolower($this->input->post('collectible_name'));
+      $tableName = preg_replace('/ /', '_', strtolower($this->input->post('collectible_name')));
       $names = $this->input->post('attribute_name');
       $types = $this->input->post('attribute_type');
       $fields = array();
@@ -27,8 +33,10 @@ class Collectible extends CI_Controller
     }
   }
 
-  function add() {
-    $this->load->view('collectible/add');
+  function add($collectible) {
+    // TODO: validate that $collectible has been defined
+    $fields = $this->db->field_data($collectible);
+    $this->load->view('collectible/add', array('collectible' => $collectible, 'fields' => $fields));
   }
 
   function edit() {
