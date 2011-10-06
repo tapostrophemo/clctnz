@@ -13,7 +13,11 @@
 <?php foreach ($fields as $field): if ($field->name != 'id'): ?>
 <p>
  <label><?=preg_replace('/_/', ' ', $field->name)?></label><br/>
+<?php if ($field->type != 'blob'): ?>
  <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?>/>
+<?php else: ?>
+ <textarea name="<?=$field->name?>" rows="3" cols="35"></textarea>
+<?php endif; ?>
 </p>
 <?php endif; endforeach; ?>
 
