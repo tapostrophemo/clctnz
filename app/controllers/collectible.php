@@ -36,15 +36,40 @@ class Collectible extends CI_Controller
   function add($collectible) {
     // TODO: validate that $collectible has been defined
     $fields = $this->db->field_data($collectible);
-    $this->load->view('collectible/add', array('collectible' => $collectible, 'fields' => $fields));
+    if (!$this->form_validation->run('collectible_save')) {
+      $this->load->view('collectible/add', array('collectible' => $collectible, 'fields' => $fields));
+    }
+    else {
+      $data = array();
+      foreach ($fields as $field) {
+        $name = $field->name;
+        if ($name == 'id') continue;
+        $value = $this->input->post($name);
+        $data[$name] = $value;
+      }
+      $this->db->insert($collectible, $data);
+      redirect("/collectible/all/$collectible");
+    }
+  }
+
+  function collectible_save_valid($junk) {
+/*echo '<pre>';
+$segments = $this->uri->segment_array();
+print_r($segments);
+$fields = $this->db->field_data($segments[3]); // TODO: if (!isset(...
+print_r($fields);
+echo '</pre>';
+*/
   }
 
   function edit() {
     $this->load->view('collectible/edit');
   }
 
-  function all() {
-    $this->load->view('collectible/all');
+  function all($collectible) {
+    $fields = $this->db->field_data($collectible);
+    $data = $this->db->get($collectible)->result_array();
+    $this->load->view('collectible/all', array('collectible' => $collectible, 'fields' => $fields, 'data' => $data));
   }
 }
 
