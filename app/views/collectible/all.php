@@ -3,7 +3,7 @@
 <h2>view all <?=$collectible?></h2>
 
 <div class="help">
- <p>This page should allow the user to view all collectibles in a "collection", i.e., of a certain type.</p>
+ <p>This page allows you to view all collectibles in a "collection", i.e., of a certain type.</p>
 </div>
 
 <table>
