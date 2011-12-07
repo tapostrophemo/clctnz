@@ -19,5 +19,10 @@
  <li><a href="/collectible/edit">Edit (/view) collectible</a></li>
 </ul>
 
+<h3>applications</h3>
+<ul>
+ <li><a href="/application/export">Export</a></li>
+</ul>
+
 <?php $this->view("footer"); ?>
 

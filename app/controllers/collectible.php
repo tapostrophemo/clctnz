@@ -34,9 +34,10 @@ class Collectible extends CI_Controller
   }
 
   function alter($collectible) {
-    $c = $this->db->query('show create table ' . $this->db->escape_str($collectible))->result_array();
+    $this->load->model('CollectionApp');
+    $sql = $this->CollectionApp->getSql($collectible);
     $d = $this->db->query('describe ' . $this->db->escape_str($collectible))->result_array();
-    $this->load->view('collectible/alter', array('collectible' => $collectible, 'sql' => $c[0]['Create Table'], 'description' => $d));
+    $this->load->view('collectible/alter', array('collectible' => $collectible, 'sql' => $sql, 'description' => $d));
   }
 
   function add($collectible) {

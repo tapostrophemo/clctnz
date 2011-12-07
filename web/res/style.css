@@ -2,7 +2,7 @@ label, legend {
   font-weight: bold;
 }
 
-.help {
+.help, .collapsed {
   display: none;
 }
 
