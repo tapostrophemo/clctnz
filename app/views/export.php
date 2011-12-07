@@ -6,6 +6,8 @@
  <p>This page alows you to export all current collectibles as an application.</p>
 </div>
 
+<p><a href="#" id="toggleAll">Toggle all files</a></p>
+
 <h3>database</h3>
 <pre>setup.sql <code class="collapsed"><?=$sql?></code></pre>
 
@@ -18,8 +20,12 @@
 $(document).ready(function () {
   $.each($(".collapsed"), function (i, section) {
     var $section = $(section);
-    var $toggle = $("<a href=\"#\">show/hide</a>").click(function () {$section.toggleClass("collapsed")});
+    var $toggle = $("<a class=\"toggle\" href=\"#\">show/hide</a>").click(function () {$section.toggleClass("collapsed"); return false;});
     $toggle.insertBefore($section);
+  });
+
+  $("#toggleAll").click(function () {
+    $.each($(".toggle"), function (i, link) {$(link).click();});
   });
 });
 </script>
