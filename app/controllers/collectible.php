@@ -27,7 +27,6 @@ class Collectible extends CI_Controller
       $this->dbforge->add_field('id');
       $this->dbforge->add_field($fields);
       $this->dbforge->create_table($tableName, true);
-      $this->dbforge->add_key('id', true);
 
       redirect('/');
     }
