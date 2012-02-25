@@ -9,5 +9,7 @@
 
 <!--pre><?php print_r($description); ?></pre-->
 
+<p><a href="/collectible/delete/<?=$collectible?>"/>Delete <?=$collectible?> table</a></p>
+
 <?php $this->view("footer"); ?>
 

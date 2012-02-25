@@ -39,6 +39,12 @@ class Collectible extends CI_Controller
     $this->load->view('collectible/alter', array('collectible' => $collectible, 'sql' => $sql, 'description' => $d));
   }
 
+  function delete($collectible) {
+    $this->load->dbforge();
+    $this->dbforge->drop_table($collectible);
+    redirect('/');
+  }
+
   function add($collectible) {
     // TODO: validate that $collectible has been defined
     $fields = $this->db->field_data($collectible);

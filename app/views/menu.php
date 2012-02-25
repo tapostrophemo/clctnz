@@ -6,7 +6,7 @@
 <ul>
  <li><a href="/collectible/define">Define collectible</a></li>
 <?php foreach ($collectibles as $collectible): $name = preg_replace('/_/', ' ', $collectible) ?>
- <li><a href="/collectible/alter/<?=$collectible?>">Alter <?=$name?> table</a></li>
+ <li><a href="/collectible/alter/<?=$collectible?>">Alter/delete <?=$name?> table</a></li>
 <?php endforeach; ?>
 </ul>
 
