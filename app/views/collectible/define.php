@@ -44,6 +44,7 @@ $(document).ready(function () {
     $a.append($d);
     $a.insertBefore($("#attributes").children().last());
     $a.find("input").focus().select();
+    return false;
   });
 });
 </script>
