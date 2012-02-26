@@ -10,7 +10,7 @@
 
  <tr>
  <?php foreach ($fields as $field): ?>
-  <th><?=preg_replace('/_/', ' ', $field->name)?></th>
+  <th><?=preg_replace('/_/', '&nbsp;', $field->name)?></th>
  <?php endforeach; ?>
  </tr>
 
