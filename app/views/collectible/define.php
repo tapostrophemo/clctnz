@@ -28,6 +28,7 @@
    <option value="int">number</option>
    <option value="varchar">text (short)</option>
    <option value="text">text (long)</option>
+   <option value="date">date</option>
   </select>
  </p>
  <p><a href="#" id="newAttribute">new attribute</a></p>
