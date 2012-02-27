@@ -9,6 +9,11 @@
 
 <!--pre><?php print_r($description); ?></pre-->
 
+<?=form_open('collectible/alter/'.$collectible)?>
+ <input type="text" name="collectible_name"/>
+ <input type="submit" value="Rename table"/>
+</form>
+
 <p><a href="/collectible/delete/<?=$collectible?>"/>Delete <?=$collectible?> table</a></p>
 
 <?php $this->view("footer"); ?>

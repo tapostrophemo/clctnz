@@ -33,10 +33,17 @@ class Collectible extends CI_Controller
   }
 
   function alter($collectible) {
-    $this->load->model('CollectionApp');
-    $sql = $this->CollectionApp->getSql($collectible);
-    $d = $this->db->query('describe ' . $this->db->escape_str($collectible))->result_array();
-    $this->load->view('collectible/alter', array('collectible' => $collectible, 'sql' => $sql, 'description' => $d));
+    if (!$this->form_validation->run('collectible_alter')) {
+      $this->load->model('CollectionApp');
+      $sql = $this->CollectionApp->getSql($collectible);
+      $d = $this->db->query('describe ' . $this->db->escape_str($collectible))->result_array();
+      $this->load->view('collectible/alter', array('collectible' => $collectible, 'sql' => $sql, 'description' => $d));
+    }
+    else {
+      $this->load->dbforge();
+      $this->dbforge->rename_table($collectible, $this->input->post('collectible_name'));
+      redirect('/');
+    }
   }
 
   function delete($collectible) {
