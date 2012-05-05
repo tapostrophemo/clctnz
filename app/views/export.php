@@ -9,7 +9,7 @@
 <p><a href="#" id="toggleAll">Toggle all files</a></p>
 
 <h3>database</h3>
-<pre>setup.sql <code class="collapsed"><?=$sql?></code></pre>
+<pre>sql/setup.sql <code class="collapsed"><?=$sql?></code></pre>
 
 <h3>code</h3>
 <?php foreach ($code as $file): ?>

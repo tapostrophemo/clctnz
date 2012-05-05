@@ -21,15 +21,15 @@ class Application extends CI_Controller
 
     $sql = '';
     $code = array(
-      array('name' => 'header.php', 'code' => getTemplate('views/header.php')),
-      array('name' => 'menu.php', 'code' => getTemplate('views/menu.php')),
-      array('name' => 'footer.php', 'code' => getTemplate('views/footer.php')),
+      array('name' => 'app/views/header.php', 'code' => getTemplate('views/header.php')),
+      array('name' => 'app/views/menu.php', 'code' => getTemplate('views/menu.php')),
+      array('name' => 'app/views/footer.php', 'code' => getTemplate('views/footer.php')),
     );
     foreach ($this->CollectionApp->getTables() as $collectible) {
       $sql .= "\n" . $this->CollectionApp->getSql($collectible) . ";\n";
-      $code[] = array('name' => "${collectible}_all.php", 'code' => getTemplate('views/collectible/all.php', $collectible));
-      $code[] = array('name' => "${collectible}_add.php", 'code' => getTemplate('views/collectible/add.php', $collectible));
-      $code[] = array('name' => "${collectible}_edit.php", 'code' => getTemplate('views/collectible/edit.php', $collectible));
+      $code[] = array('name' => "app/views/${collectible}/all.php", 'code' => getTemplate('views/collectible/all.php', $collectible));
+      $code[] = array('name' => "app/views/${collectible}/add.php", 'code' => getTemplate('views/collectible/add.php', $collectible));
+      $code[] = array('name' => "app/views/${collectible}/edit.php", 'code' => getTemplate('views/collectible/edit.php', $collectible));
     }
 
     $this->load->view('export', array('sql' => $sql, 'code' => $code));
