@@ -2,15 +2,15 @@
 
 function getTemplate($path, $replacement = null) {
   if (!$replacement) {
-    return file_get_contents(APPPATH.$path);
+    return getFile($path);
   }
-  else {
-    return
-      str_replace('$collectible', $replacement,
-      str_replace('<?=$collectible?>', $replacement,
-        file_get_contents(APPPATH.$path)
-      ));
-  }
+  return
+    str_replace('$collectible', $replacement,
+      str_replace('<?=$collectible?>', $replacement, file_get_contents(APPPATH.$path)));
+}
+
+function getFile($path) {
+  return file_get_contents(APPPATH.$path);
 }
 
 class Application extends CI_Controller
@@ -35,10 +35,12 @@ class Application extends CI_Controller
       $config[] = "  '${collectible}_save' => array(array('field' => 'junk', 'label' => '', 'rules' => 'callback_${collectible}_save_valid')),";
     }
     $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/form_validation.php', join($config, "\n")));
+    $code[] = array('name' => 'app/config/routes.php', 'code' => getTemplate('views/templates/routes.php'));
 
     foreach ($collectibles as $collectible) {
       $code[] = array('name' => "app/controllers/${collectible}.php", 'code' => getTemplate('views/templates/controller.php', $collectible));
     }
+    $code[] = array('name' => 'app/controllers/site.php', 'code' => getTemplate('views/templates/site_controller.php'));
 
     $code[] = array('name' => 'app/views/header.php', 'code' => getTemplate('views/header.php'));
     $code[] = array(
@@ -59,6 +61,9 @@ class Application extends CI_Controller
     }
     $code[] = array('name' => 'sql/setup.sql', 'code' => join($sql, ";\n\n") . ';');
     $code[] = array('name' => 'sql/teardown.sql', 'code' => "DROP TABLE IF EXISTS\n  " . join($collectibles, ",\n  ") . ';');
+
+    $code[] = array('name' => 'web/index.php', 'code' => getTemplate('../web/index.php'));
+    $code[] = array('name' => 'web/.htaccess', 'code' => getTemplate('../web/.htaccess'));
 
     return $code;
   }
@@ -81,7 +86,6 @@ class Application extends CI_Controller
       'application/app/third_party',
       'application/lib',
       'application/test',
-      'application/web',
       'application/web/res'));
     $this->zip->download('application.zip');
   }
