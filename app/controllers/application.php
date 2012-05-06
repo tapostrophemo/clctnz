@@ -36,6 +36,12 @@ class Application extends CI_Controller
       $code[] = array('name' => "app/controllers/${collectible}.php", 'code' => getTemplate('views/templates/controller.php', $collectible));
     }
 
+    $config = array();
+    foreach ($collectibles as $collectible) {
+      $config[] = "  '${collectible}_save' => array(array('field' => 'junk', 'label' => '', 'rules' => 'callback_${collectible}_save_valid')),";
+    }
+    $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/form_validation.php', join($config, "\n")));
+
     $this->load->view('export', array('sql' => $sql, 'code' => $code));
   }
 }
