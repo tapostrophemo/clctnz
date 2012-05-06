@@ -2,15 +2,14 @@
 
 function getTemplate($path, $replacement = null) {
   if (!$replacement) {
-    return htmlspecialchars(file_get_contents(APPPATH.$path));
+    return file_get_contents(APPPATH.$path);
   }
   else {
-    return htmlspecialchars(
+    return
       str_replace('$collectible', $replacement,
       str_replace('<?=$collectible?>', $replacement,
         file_get_contents(APPPATH.$path)
-      ))
-    );
+      ));
   }
 }
 

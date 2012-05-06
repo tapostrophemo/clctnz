@@ -9,7 +9,7 @@
 <p><a href="#" id="toggleAll">Toggle all files</a></p>
 
 <?php foreach ($code as $file): ?>
-<pre><?=$file['name']?> <code class="collapsed"><?=$file['code']?></code></pre>
+<pre><?=$file['name']?> <code class="collapsed"><?=htmlspecialchars($file['code'])?></code></pre>
 <?php endforeach; ?>
 
 <script type="text/javascript">
