@@ -19,7 +19,16 @@ class Application extends CI_Controller
     $this->load->model('CollectionApp');
     $collectibles = $this->CollectionApp->getTables();
     $code = $this->generateCode($collectibles);
-    $this->load->view('export', array('code' => $code));
+    if ($this->input->post('to_file') == true) {
+      $this->load->library('zip');
+      foreach ($code as $c) {
+        $this->zip->add_data('application/'.$c['name'], $c['code']);
+      }
+      $this->zip->download('application.zip');
+    }
+    else {
+      $this->load->view('export', array('code' => $code));
+    }
   }
 
   private function generateCode($collectibles) {

@@ -6,7 +6,14 @@
  <p>This page alows you to export all current collectibles as an application.</p>
 </div>
 
-<p><a href="#" id="toggleAll">Toggle all files</a></p>
+<p>
+ <a href="#" id="toggleAll">Toggle all files</a>
+ &nbsp;
+ <a href="#" id="download">Download *.zip</a>
+ <form id="downloadForm" method="post" action="/application/export">
+  <input type="hidden" name="to_file" value="true"/>
+ </form>
+</p>
 
 <?php foreach ($code as $file): ?>
 <pre><?=$file['name']?> <code class="collapsed"><?=htmlspecialchars($file['code'])?></code></pre>
@@ -22,6 +29,12 @@ $(document).ready(function () {
 
   $("#toggleAll").click(function () {
     $.each($(".toggle"), function (i, link) {$(link).click();});
+    return false;
+  });
+
+  $("#download").click(function () {
+    $("#downloadForm").submit();
+    return false;
   });
 });
 </script>
