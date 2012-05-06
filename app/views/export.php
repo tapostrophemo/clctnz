@@ -16,7 +16,11 @@
 </p>
 
 <?php foreach ($code as $file): ?>
+<?php if (substr($file['name'], -4) == '.php'): ?>
+<pre><?=$file['name']?> <div class="collapsed"><?php highlight_string($file['code']); ?></div></pre>
+<?php else: ?>
 <pre><?=$file['name']?> <code class="collapsed"><?=htmlspecialchars($file['code'])?></code></pre>
+<?php endif; ?>
 <?php endforeach; ?>
 
 <script type="text/javascript">
