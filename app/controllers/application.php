@@ -61,7 +61,7 @@ class Application extends CI_Controller
     foreach ($collectibles as $collectible) {
       $sql[] = $this->CollectionApp->getSql($collectible);
     }
-    $code[] = array('name' => 'sql/setup.sql', 'code' => join($sql, ";\n\n"));
+    $code[] = array('name' => 'sql/setup.sql', 'code' => join($sql, ";\n\n") . ';');
     $code[] = array('name' => 'sql/teardown.sql', 'code' => "DROP TABLE IF EXISTS\n  " . join($collectibles, ",\n  ") . ';');
 
     return $code;
