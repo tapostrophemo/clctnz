@@ -1,6 +1,6 @@
 <?php
 
-class $collectible
+class $collectible extends CI_Controller
 {
   function add() {
     // TODO: write function to add $collectible
