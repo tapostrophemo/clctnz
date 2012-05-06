@@ -20,11 +20,7 @@ class Application extends CI_Controller
     $collectibles = $this->CollectionApp->getTables();
     $code = $this->generateCode($collectibles);
     if ($this->input->post('to_file') == true) {
-      $this->load->library('zip');
-      foreach ($code as $c) {
-        $this->zip->add_data('application/'.$c['name'], $c['code']);
-      }
-      $this->zip->download('application.zip');
+      $this->downloadAsZip($code);
     }
     else {
       $this->load->view('export', array('code' => $code));
@@ -65,6 +61,29 @@ class Application extends CI_Controller
     $code[] = array('name' => 'sql/teardown.sql', 'code' => "DROP TABLE IF EXISTS\n  " . join($collectibles, ",\n  ") . ';');
 
     return $code;
+  }
+
+  private function downloadAsZip($code) {
+    $this->load->library('zip');
+    foreach ($code as $c) {
+      $this->zip->add_data('application/'.$c['name'], $c['code']);
+    }
+    $this->zip->add_dir(array(
+      'application/app/cache',
+      'application/app/core',
+      'application/app/errors',
+      'application/app/helpers',
+      'application/app/hooks',
+      'application/app/language/english',
+      'application/app/libraries',
+      'application/app/logs',
+      'application/app/models',
+      'application/app/third_party',
+      'application/lib',
+      'application/test',
+      'application/web',
+      'application/web/res'));
+    $this->zip->download('application.zip');
   }
 }
 
