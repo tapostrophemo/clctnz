@@ -36,7 +36,11 @@ class Application extends CI_Controller
     }
 
     $code[] = array('name' => 'app/views/header.php', 'code' => getTemplate('views/header.php'));
-    $code[] = array('name' => 'app/views/menu.php', 'code' => getTemplate('views/menu.php'));
+    $code[] = array(
+      'name' => 'app/views/menu.php',
+      'code' => "<?php \$this->view(\"header\"); ?>\n" .
+                $this->load->view('templates/menu', array('collectibles' => $collectibles), true) .
+                '<?php $this->view("footer"); ?>');
     $code[] = array('name' => 'app/views/footer.php', 'code' => getTemplate('views/footer.php'));
     foreach ($collectibles as $collectible) {
       $code[] = array('name' => "app/views/${collectible}/all.php", 'code' => getTemplate('views/collectible/all.php', $collectible));
