@@ -90,5 +90,19 @@ echo '</pre>';
     $data = $this->db->get($collectible)->result_array();
     $this->load->view('collectible/all', array('collectible' => $collectible, 'fields' => $fields, 'data' => $data));
   }
+
+  function items() {
+    $this->load->model('CollectionApp');
+    $tables = $this->CollectionApp->getTables();
+    $this->load->view('data', array('tables' => $tables));
+  }
+
+  function backup() {
+    require APPPATH.'config/database.php'; // NB: I wish CI had a way to access these in a less-hacky way
+    $command = 'mysqldump -u '.$db['default']['username'].' -p'.$db['default']['password'].' '.$db['default']['database'].' --compact --no-create-info';
+    $data = `$command`;
+    $this->load->helper('download');
+    force_download('collectible_data.sql', $data);
+  }
 }
 
