@@ -6,6 +6,13 @@ label, legend {
   display: none;
 }
 
+.ref {
+  position: relative;
+  top: -57px;
+  left: 10%;
+  width: 45%;
+}
+
 /** borrowed from CI, then modified **/
 ::selection{ background-color: #E13300; color: white; }
 ::moz-selection{ background-color: #E13300; color: white; }

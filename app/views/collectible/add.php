@@ -15,6 +15,14 @@
  <label><?=preg_replace('/_/', ' ', $field->name)?></label><br/>
 <?php if ($field->type != 'blob'): ?>
  <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?>/>
+ <?php
+ if (array_key_exists($field->name, $refs)) {
+   echo '<div class="ref"><label>' . $refs[$field->name] . '</label>';
+   $rawData = $this->db->get($refs[$field->name])->result_array();
+   $this->load->view('collectible/_all', array('hide_header_row' => true, 'data' => $rawData));
+   echo '</div>';
+ }
+ ?>
 <?php else: ?>
  <textarea name="<?=$field->name?>" rows="3" cols="35"></textarea>
 <?php endif; ?>

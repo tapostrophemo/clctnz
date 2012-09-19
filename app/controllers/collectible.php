@@ -2,6 +2,11 @@
 
 class Collectible extends CI_Controller
 {
+  function __construct() {
+    parent::__construct();
+    $this->load->model('CollectionApp');
+  }
+
   function define() {
     if (!$this->form_validation->run('collectible_define')) {
       // TODO: more validation:
@@ -34,7 +39,6 @@ class Collectible extends CI_Controller
 
   function alter($collectible) {
     if (!$this->form_validation->run('collectible_alter')) {
-      $this->load->model('CollectionApp');
       $sql = $this->CollectionApp->getSql($collectible);
       $d = $this->db->query('describe ' . $this->db->escape_str($collectible))->result_array();
       $this->load->view('collectible/alter', array('collectible' => $collectible, 'sql' => $sql, 'description' => $d));
@@ -54,9 +58,23 @@ class Collectible extends CI_Controller
 
   function add($collectible) {
     // TODO: validate that $collectible has been defined
+
     $fields = $this->db->field_data($collectible);
+
     if (!$this->form_validation->run('collectible_save')) {
-      $this->load->view('collectible/add', array('collectible' => $collectible, 'fields' => $fields));
+      $refs = array();
+      $tables = $this->CollectionApp->getTables();
+      foreach ($fields as $field) {
+        // find references to foreign-key; TODO: would be better to use and rely on DB FK metadata
+        if (substr($field->name, -3) == '_id') {
+          foreach ($tables as $table) {
+            if (strpos($table, substr($field->name, 0, -3)) !== false) {
+              $refs[$field->name] = $table;
+            }
+          }
+        }
+      }
+      $this->load->view('collectible/add', array('collectible' => $collectible, 'fields' => $fields, 'refs' => $refs));
     }
     else {
       $data = array();
@@ -92,7 +110,6 @@ echo '</pre>';
   }
 
   function items() {
-    $this->load->model('CollectionApp');
     $tables = $this->CollectionApp->getTables();
     $this->load->view('data', array('tables' => $tables));
   }
