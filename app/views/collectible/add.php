@@ -13,7 +13,7 @@
 <?php foreach ($fields as $field): if ($field->name != 'id'): ?>
 <p>
  <label><?=preg_replace('/_/', ' ', $field->name)?></label><br/>
-<?php if ($field->type != 'blob'): ?>
+<?php if ($field->type != 'text'): ?>
  <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?>/>
  <?php
  if (array_key_exists($field->name, $refs)) {
