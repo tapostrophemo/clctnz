@@ -10,8 +10,14 @@
 
 <?php foreach ($data as $row): ?>
  <tr>
- <?php foreach ($row as $element): ?>
-  <td><?=$element?></td>
+ <?php foreach ($row as $column => $value): ?>
+  <td>
+  <?php if ($column == 'id'): ?>
+   <a href="/collectible/edit/<?=$collectible?>/<?=$value?>"><?=$value?></a>
+  <?php else: ?>
+   <?=$value?>
+  <?php endif; ?>
+  </td>
  <?php endforeach; ?>
  </tr>
 <?php endforeach; ?>

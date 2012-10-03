@@ -13,6 +13,13 @@ label, legend {
   width: 45%;
 }
 
+.dataSection {
+  border: 1px solid #D0D0D0;
+  background-color: #f9f9f9;
+  margin: 14px 0 14px 0;
+  padding: 0 10px 12px 10px;
+}
+
 /** borrowed from CI, then modified **/
 ::selection{ background-color: #E13300; color: white; }
 ::moz-selection{ background-color: #E13300; color: white; }

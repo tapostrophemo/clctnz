@@ -62,18 +62,7 @@ class Collectible extends CI_Controller
     $fields = $this->db->field_data($collectible);
 
     if (!$this->form_validation->run('collectible_save')) {
-      $refs = array();
-      $tables = $this->CollectionApp->getTables();
-      foreach ($fields as $field) {
-        // find references to foreign-key; TODO: would be better to use and rely on DB FK metadata
-        if (substr($field->name, -3) == '_id') {
-          foreach ($tables as $table) {
-            if (strpos($table, substr($field->name, 0, -3)) !== false) {
-              $refs[$field->name] = $table;
-            }
-          }
-        }
-      }
+      $refs = $this->getRefs($fields);
       $this->load->view('collectible/add', array('collectible' => $collectible, 'fields' => $fields, 'refs' => $refs));
     }
     else {
@@ -99,8 +88,43 @@ echo '</pre>';
 */
   }
 
-  function edit() {
-    $this->load->view('collectible/edit');
+  function edit($collectible, $id) {
+    // TODO: refactor this (and 'add' above); this chunk is nearly identical
+
+    $fields = $this->db->field_data($collectible);
+
+    if (!$this->form_validation->run('collectible_save')) {
+      $refs = $this->getRefs($fields);
+      $item = $this->CollectionApp->getItem($collectible, $id);
+      $this->load->view('collectible/edit', array('collectible' => $collectible, 'item' => $item, 'fields' => $fields, 'refs' => $refs));
+    }
+    else {
+      $data = array();
+      foreach ($fields as $field) {
+        $name = $field->name;
+        if ($name == 'id') continue;
+        $value = $this->input->post($name);
+        $data[$name] = $value;
+      }
+      $this->db->where('id', $id)->update($collectible, $data);
+      redirect("/collectible/all/$collectible");
+    }
+  }
+
+  private function getRefs($fields) {
+    $refs = array();
+    $tables = $this->CollectionApp->getTables();
+    foreach ($fields as $field) {
+      // find references to foreign-key; TODO: would be better to use and rely on DB FK metadata
+      if (substr($field->name, -3) == '_id') {
+        foreach ($tables as $table) {
+          if (strpos($table, substr($field->name, 0, -3)) !== false) {
+            $refs[$field->name] = $table;
+          }
+        }
+      }
+    }
+    return $refs;
   }
 
   function all($collectible) {
