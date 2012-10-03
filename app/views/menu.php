@@ -12,10 +12,13 @@
 
 <h3>items</h3>
 <ul>
- <li><a href="/collectible/items">View all items</a></li>
+ <li><a href="/collectible/items">View all collectibles</a></li>
 <?php foreach ($collectibles as $collectible): $name = preg_replace('/_/', ' ', $collectible) ?>
- <li><a href="/collectible/add/<?=$collectible?>">Add <?=$name?></a></li>
- <li><a href="/collectible/all/<?=$collectible?>">View all <?=$name?></a></li>
+ <li>
+  <a href="/collectible/add/<?=$collectible?>">Add</a> /
+  <a href="/collectible/all/<?=$collectible?>">view all</a>
+  <?=$collectible?>
+ </li>
 <?php endforeach; ?>
  <li><a href="/collectible/edit">Edit (/view) collectible</a></li>
 </ul>
