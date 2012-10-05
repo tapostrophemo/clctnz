@@ -19,15 +19,7 @@ class Collectible extends CI_Controller
     }
     else {
       $tableName = preg_replace('/ /', '_', strtolower($this->input->post('collectible_name')));
-      $names = $this->input->post('attribute_name');
-      $types = $this->input->post('attribute_type');
-      $fields = array();
-      for ($i = 0; $i < count($names); $i++) {
-        $name = preg_replace('/\s/', '_', strtolower($names[$i]));
-        $fields[$name] = array('type' => $types[$i]);
-        if ($types[$i] == 'varchar') $fields[$name]['constraint'] = 255;
-        if ($types[$i] == 'int') $fields[$name]['constraint'] = 10;
-      }
+      $fields = $this->setupColumnFields();
       $this->load->dbforge();
       $this->dbforge->add_field('id');
       $this->dbforge->add_field($fields);
@@ -42,6 +34,33 @@ class Collectible extends CI_Controller
       $sql = $this->CollectionApp->getSql($collectible);
       $d = $this->db->query('describe ' . $this->db->escape_str($collectible))->result_array();
       $this->load->view('collectible/alter', array('collectible' => $collectible, 'sql' => $sql, 'description' => $d));
+    }
+    else {
+      $fields = $this->setupColumnFields();
+      $this->load->dbforge();
+      $this->dbforge->add_field($fields);
+      $this->dbforge->add_column($collectible, $fields);
+
+      redirect('/');
+    }
+  }
+
+  private function setupColumnFields() {
+    $names = $this->input->post('attribute_name');
+    $types = $this->input->post('attribute_type');
+    $fields = array();
+    for ($i = 0; $i < count($names); $i++) {
+      $name = preg_replace('/\s/', '_', strtolower($names[$i]));
+      $fields[$name] = array('type' => $types[$i]);
+      if ($types[$i] == 'varchar') $fields[$name]['constraint'] = 255;
+      if ($types[$i] == 'int') $fields[$name]['constraint'] = 10;
+    }
+    return $fields;
+  }
+
+  function rename($collectible) {
+    if (!$this->form_validation->run('collectible_rename')) {
+      $this->load->view('collectible/rename', array('collectible' => $collectible));
     }
     else {
       $this->load->dbforge();
@@ -61,7 +80,7 @@ class Collectible extends CI_Controller
 
     $fields = $this->db->field_data($collectible);
 
-    if (!$this->form_validation->run('collectible_save')) {
+    if (!$this->form_validation->run('collectible_item_save')) {
       $refs = $this->getRefs($fields);
       $this->load->view('collectible/add', array('collectible' => $collectible, 'fields' => $fields, 'refs' => $refs));
     }
@@ -93,7 +112,7 @@ echo '</pre>';
 
     $fields = $this->db->field_data($collectible);
 
-    if (!$this->form_validation->run('collectible_save')) {
+    if (!$this->form_validation->run('collectible_item_save')) {
       $refs = $this->getRefs($fields);
       $item = $this->CollectionApp->getItem($collectible, $id);
       $this->load->view('collectible/edit', array('collectible' => $collectible, 'item' => $item, 'fields' => $fields, 'refs' => $refs));
