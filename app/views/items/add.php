@@ -19,7 +19,7 @@
  if (array_key_exists($field->name, $refs)) {
    echo '<div class="ref"><label>' . $refs[$field->name] . '</label>';
    $rawData = $this->db->get($refs[$field->name])->result_array();
-   $this->load->view('collectible/_all', array('hide_header_row' => true, 'data' => $rawData));
+   $this->load->view('items/_all', array('hide_header_row' => true, 'data' => $rawData));
    echo '</div>';
  }
  ?>
