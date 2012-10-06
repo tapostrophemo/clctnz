@@ -13,7 +13,7 @@
  <?php foreach ($row as $column => $value): ?>
   <td>
   <?php if ($column == 'id'): ?>
-   <a href="/collectible/edit/<?=$collectible?>/<?=$value?>"><?=$value?></a>
+   <a href="/items/edit/<?=$collectible?>/<?=$value?>"><?=$value?></a>
   <?php else: ?>
    <?=$value?>
   <?php endif; ?>

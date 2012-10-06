@@ -13,8 +13,8 @@ $config = array(
     array('field' => 'collectible_name', 'label' => 'collectible name', 'rules' => 'trim|required|max_length[64]|xss_clean'),
   ),
 
-  'collectible_item_save' => array(
-    array('field' => 'junk', 'label' => '', 'rules' => 'callback_collectible_save_valid'),
+  'item_save' => array(
+    array('field' => 'junk', 'label' => '', 'rules' => 'callback_item_save_valid'),
   ),
 );
 

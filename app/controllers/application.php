@@ -50,9 +50,9 @@ class Application extends CI_Controller
                 '<?php $this->view("footer"); ?>');
     $code[] = array('name' => 'app/views/footer.php', 'code' => getTemplate('views/footer.php'));
     foreach ($collectibles as $collectible) {
-      $code[] = array('name' => "app/views/${collectible}/all.php", 'code' => getTemplate('views/collectible/all.php', $collectible));
-      $code[] = array('name' => "app/views/${collectible}/add.php", 'code' => getTemplate('views/collectible/add.php', $collectible));
-      $code[] = array('name' => "app/views/${collectible}/edit.php", 'code' => getTemplate('views/collectible/edit.php', $collectible));
+      $code[] = array('name' => "app/views/${collectible}/all.php", 'code' => getTemplate('views/items/all.php', $collectible));
+      $code[] = array('name' => "app/views/${collectible}/add.php", 'code' => getTemplate('views/items/add.php', $collectible));
+      $code[] = array('name' => "app/views/${collectible}/edit.php", 'code' => getTemplate('views/items/edit.php', $collectible));
     }
 
     $sql = array();

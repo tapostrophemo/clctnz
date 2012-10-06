@@ -6,9 +6,9 @@
  <p>This page allows you to view all collectibles in a "collection", i.e., of a certain type.</p>
 </div>
 
-<?php $this->load->view('collectible/_all', array('fields' => $fields, 'data' => $data)); ?>
+<?php $this->load->view('items/_all', array('fields' => $fields, 'data' => $data)); ?>
 
-<p><a href="/collectible/add/<?=$collectible?>">Add <?=$collectible?></a></p>
+<p><a href="/items/add/<?=$collectible?>">Add <?=$collectible?></a></p>
 
 <?php $this->view("footer"); ?>
 
