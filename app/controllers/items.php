@@ -45,6 +45,11 @@ echo '</pre>';
 */
   }
 
+  function delete($collectible, $id) {
+    $this->CollectionItems->deleteItem($collectible, $id);
+    redirect("/items/all/$collectible");
+  }
+
   function edit($collectible, $id) {
     // TODO: refactor this (and 'add' above); this chunk is nearly identical
 

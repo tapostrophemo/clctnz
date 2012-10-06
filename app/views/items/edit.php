@@ -3,8 +3,13 @@
 <h2>edit <?=$collectible?></h2>
 
 <div class="help">
- <p>This page allows you to edit an existing collectible.</p>
+ <p>This page allows you to edit (or delete) an existing collectible.</p>
 </div>
+
+
+<?=form_open("items/delete/$collectible/{$item->id}")?>
+ <p><a href="#" onclick="this.parentNode.parentNode.submit()">delete?</a></p>
+</form>
 
 <?=form_open("items/edit/$collectible/{$item->id}")?>
 
