@@ -38,7 +38,6 @@ class Collectible extends CI_Controller
     else {
       $fields = $this->setupColumnFields();
       $this->load->dbforge();
-      $this->dbforge->add_field($fields);
       $this->dbforge->add_column($collectible, $fields);
 
       redirect('/');

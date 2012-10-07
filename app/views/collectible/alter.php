@@ -24,8 +24,9 @@
    <option value="date">date</option>
   </select>
  </p>
- <p><!--a href="#" id="newAttribute">new attribute</a--></p>
+ <p><a href="#" id="newAttribute">new attribute</a></p>
 </fieldset>
+
 <input type="submit" value="alter definition"/>
 
 </form>
@@ -36,10 +37,7 @@
  <?=$collectible?> table
 </p>
 
-<!--
-TODO: check for CI fix to issue ADDing multiple columns via dbforge (or fork it and fix it myself)
 <?php $this->view("scripts/attributes"); ?>
--->
 
 <?php $this->view("footer"); ?>
 
