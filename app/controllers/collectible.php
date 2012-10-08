@@ -5,6 +5,7 @@ class Collectible extends CI_Controller
   function __construct() {
     parent::__construct();
     $this->load->model('CollectionApp');
+    $this->load->dbforge();
   }
 
   function define() {
@@ -20,7 +21,6 @@ class Collectible extends CI_Controller
     else {
       $tableName = preg_replace('/ /', '_', strtolower($this->input->post('collectible_name')));
       $fields = $this->setupColumnFields();
-      $this->load->dbforge();
       $this->dbforge->add_field('id');
       $this->dbforge->add_field($fields);
       $this->dbforge->create_table($tableName, true);
@@ -37,11 +37,14 @@ class Collectible extends CI_Controller
     }
     else {
       $fields = $this->setupColumnFields();
-      $this->load->dbforge();
       $this->dbforge->add_column($collectible, $fields);
-
       redirect('/');
     }
+  }
+
+  function alter_delete($collectible, $attribute) {
+    $this->dbforge->drop_column($collectible, $attribute);
+    redirect('/');
   }
 
   private function setupColumnFields() {
@@ -62,14 +65,12 @@ class Collectible extends CI_Controller
       $this->load->view('collectible/rename', array('collectible' => $collectible));
     }
     else {
-      $this->load->dbforge();
       $this->dbforge->rename_table($collectible, $this->input->post('collectible_name'));
       redirect('/');
     }
   }
 
   function delete($collectible) {
-    $this->load->dbforge();
     $this->dbforge->drop_table($collectible);
     redirect('/');
   }

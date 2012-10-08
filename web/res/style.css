@@ -20,6 +20,30 @@ label, legend {
   padding: 0 10px 12px 10px;
 }
 
+.multicol {
+  float: left;
+  margin: 0 15px 15px 0;
+}
+
+.deleteable {
+  margin: 0 0 8px 0;
+  padding: 0;
+  font-size: 12px;
+  line-height: 20px;
+  vertical-align: top;
+  background: transparent url("/res/delete.png") top left no-repeat;
+}
+.deleteable a {
+  width: 100%;
+  display: inline-block;
+  text-indent: 30px;
+  text-decoration: none;
+  margin-top: -1px;
+}
+.deleteable a:hover {
+  text-decoration: underline;
+}
+
 /** borrowed from CI, then modified **/
 ::selection{ background-color: #E13300; color: white; }
 ::moz-selection{ background-color: #E13300; color: white; }

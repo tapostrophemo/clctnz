@@ -13,7 +13,7 @@
 
 <?=validation_errors()?>
 
-<fieldset id="attributes"><legend>add attributes</legend>
+<fieldset id="attributes" class="multicol"><legend>add attributes</legend>
  <p id="firstAttribute">
   <label>attribute name</label> <input type="text" name="attribute_name[]"/>
   <label>type of data</label>
@@ -26,6 +26,14 @@
  </p>
  <p><a href="#" id="newAttribute">new attribute</a></p>
 </fieldset>
+
+<fieldset class="multicol"><legend>delete attributes</legend>
+<?php foreach ($description as $d): if ($d['Field'] == 'id') continue; ?>
+ <p class="deleteable"><a href="/collectible/alter_delete/<?=$collectible?>/<?=$d['Field']?>"><?=$d['Field']?></a></p>
+<?php endforeach; ?>
+</fieldset>
+
+<div style="clear:both"></div>
 
 <input type="submit" value="alter definition"/>
 
