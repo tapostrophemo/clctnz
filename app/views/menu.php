@@ -24,7 +24,11 @@
 
 <h3>applications</h3>
 <ul>
- <li><a href="/application/export">Export</a></li>
+ <li>
+  <a href="/application/export">Export</a> /
+  <a href="/application/import">Import</a>
+ </li>
+ <li><a href="/application/reset">Reset</a></li>
 </ul>
 
 <?php $this->view("footer"); ?>

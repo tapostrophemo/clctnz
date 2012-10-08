@@ -89,5 +89,33 @@ class Application extends CI_Controller
       'application/web/res'));
     $this->zip->download('application.zip');
   }
+
+  function reset() {
+    require APPPATH.'config/database.php'; // NB: I wish CI had a way to access these in a less-hacky way
+    $this->load->dbforge();
+    $this->dbforge->drop_database($db['default']['database']);
+    $this->dbforge->create_database($db['default']['database']);
+    redirect('/');
+  }
+
+  function import() {
+    if (!$this->form_validation->run('collectibles_import')) {
+      $this->load->view('import');
+    }
+    else {
+      $this->load->view('header');
+      $this->output->append_output('<h2>import</h2>');
+      $sqls = explode(';', $this->input->post('sql'));
+      foreach ($sqls as $sql) {
+        $sql = trim($sql);
+        if ($sql == "") continue;
+
+        $status = $this->db->simple_query($sql) ? '' : '<br>FAILED';
+        $line = substr($sql, 0, strpos($sql, "\n"));
+        $this->output->append_output("<code>$line...$status</code>");
+      }
+      $this->load->view('footer');
+    }
+  }
 }
 

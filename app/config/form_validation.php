@@ -9,6 +9,10 @@ $config = array(
     array('field' => 'attribute_name[]', 'label' => 'attribute name', 'rules' => 'trim|required|max_length[64]|xss_clean'),
   ),
 
+  'collectibles_import' => array(
+    array('field' => 'sql', 'label' => 'SQL', 'rules' => 'trim|required'),
+  ),
+
   'collectible_rename' => array(
     array('field' => 'collectible_name', 'label' => 'collectible name', 'rules' => 'trim|required|max_length[64]|xss_clean'),
   ),
