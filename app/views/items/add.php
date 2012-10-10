@@ -12,7 +12,7 @@
 
 <?php foreach ($fields as $field): if ($field->name != 'id'): ?>
 <p>
- <label><?=preg_replace('/_/', ' ', $field->name)?></label><br/>
+ <label><?=strtolower(humanize($field->name))?></label><br/>
 <?php if ($field->type != 'text'): ?>
  <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?>/>
  <?php

@@ -19,7 +19,7 @@ class Collectible extends CI_Controller
       $this->load->view('collectible/define');
     }
     else {
-      $tableName = preg_replace('/ /', '_', strtolower($this->input->post('collectible_name')));
+      $tableName = underscore($this->input->post('collectible_name'));
       $fields = $this->setupColumnFields();
       $this->dbforge->add_field('id');
       $this->dbforge->add_field($fields);
@@ -52,7 +52,7 @@ class Collectible extends CI_Controller
     $types = $this->input->post('attribute_type');
     $fields = array();
     for ($i = 0; $i < count($names); $i++) {
-      $name = preg_replace('/\s/', '_', strtolower($names[$i]));
+      $name = underscore($names[$i]);
       $fields[$name] = array('type' => $types[$i]);
       if ($types[$i] == 'varchar') $fields[$name]['constraint'] = 255;
       if ($types[$i] == 'int') $fields[$name]['constraint'] = 10;

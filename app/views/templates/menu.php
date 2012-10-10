@@ -1,11 +1,11 @@
 <h2>menu</h2>
 
 <ul>
-<?php foreach ($collectibles as $collectible): $name = preg_replace('/_/', ' ', $collectible) ?>
+<?php foreach ($collectibles as $collectible): $name = strtolower(humanize($collectible)) ?>
  <li>
   <a href="/collectible/add/<?=$collectible?>">Add</a> /
   <a href="/collectible/all/<?=$collectible?>">view all</a>
-  <?=$collectible?>
+  <?=$name?>
  </li>
 <?php endforeach; ?>
 </ul>

@@ -5,18 +5,18 @@
 <h3>collections</h3>
 <ul>
  <li><a href="/collectible/define">Define collectible</a></li>
-<?php foreach ($collectibles as $collectible): $name = preg_replace('/_/', ' ', $collectible) ?>
+<?php foreach ($collectibles as $collectible): $name = strtolower(humanize($collectible)) ?>
  <li><a href="/collectible/alter/<?=$collectible?>">Alter '<?=$name?>' table</a></li>
 <?php endforeach; ?>
 </ul>
 
 <h3>items</h3>
 <ul>
-<?php foreach ($collectibles as $collectible): $name = preg_replace('/_/', ' ', $collectible) ?>
+<?php foreach ($collectibles as $collectible): $name = strtolower(humanize($collectible)) ?>
  <li>
   <a href="/items/add/<?=$collectible?>">Add</a> /
   <a href="/items/all/<?=$collectible?>">view</a>
-  <?=$collectible?>
+  <?=$name?>
  </li>
 <?php endforeach; ?>
  <li><a href="/items">View all collectibles</a></li>

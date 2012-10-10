@@ -17,14 +17,14 @@
 
 <?php foreach ($fields as $field): if ($field->name != 'id'): ?>
 <p>
- <label><?=preg_replace('/_/', ' ', $field->name)?></label><br/>
+ <label><?=strtolower(humanize($field->name))?></label><br/>
 <?php if ($field->type != 'text'): ?>
  <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?> value="<?=form_prep($item->{$field->name})?>"/>
  <?php
  if (array_key_exists($field->name, $refs)) {
    echo '<div class="ref"><label>' . $refs[$field->name] . '</label>';
    $rawData = $this->db->get($refs[$field->name])->result_array();
-   $this->load->view('collectible/_all', array('hide_header_row' => true, 'data' => $rawData));
+   $this->load->view('items/_all', array('hide_header_row' => true, 'data' => $rawData));
    echo '</div>';
  }
  ?>
