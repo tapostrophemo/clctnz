@@ -56,7 +56,7 @@ if (defined('ENVIRONMENT'))
  * as this file.
  *
  */
-	$system_path = '../lib/ci-2.1.0';
+	$system_path = '../lib/ci-2.1.3';
 
 /*
  *---------------------------------------------------------------

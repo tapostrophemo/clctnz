@@ -65,7 +65,7 @@ class Collectible extends CI_Controller
       $this->load->view('collectible/rename', array('collectible' => $collectible));
     }
     else {
-      $this->dbforge->rename_table($collectible, $this->input->post('collectible_name'));
+      $this->dbforge->rename_table($collectible, underscore($this->input->post('collectible_name')));
       redirect('/');
     }
   }
