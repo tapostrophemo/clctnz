@@ -26,6 +26,7 @@
   <label>type of data</label>
   <select name="attribute_type[]">
    <option value="int">number</option>
+   <option value="decimal(14,2)">money</option>
    <option value="varchar">text (short)</option>
    <option value="text">text (long)</option>
    <option value="date">date</option>
