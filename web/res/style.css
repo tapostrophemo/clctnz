@@ -44,6 +44,19 @@ label, legend {
   text-decoration: underline;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+tr:hover {
+  background-color: #f3f3f3;
+}
+
+td {
+  vertical-align: top;
+  padding: 5px 0 5px 0;
+}
+
 /** borrowed from CI, then modified **/
 ::selection{ background-color: #E13300; color: white; }
 ::moz-selection{ background-color: #E13300; color: white; }
