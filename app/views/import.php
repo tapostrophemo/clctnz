@@ -2,7 +2,7 @@
 
 <h2>import</h2>
 
-<p>Past SQL code below to create a set of tables for storing your "collectibles".</p>
+<p>Paste SQL code below to create a set of tables for storing your "collectibles".</p>
 
 <?=form_open("/application/import")?>
 
