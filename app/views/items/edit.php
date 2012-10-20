@@ -12,13 +12,18 @@
 </form>
 
 <?=form_open("items/edit/$collectible/{$item->id}")?>
+<input type="hidden" name="id" value="<?=$item->id?>"/>
 
 <?=validation_errors()?>
 
 <?php foreach ($fields as $field): if ($field->name != 'id'): ?>
 <p>
  <label><?=strtolower(humanize($field->name))?></label><br/>
-<?php if ($field->type != 'text'): ?>
+<?php if ($field->type == 'text'): ?>
+ <textarea name="<?=$field->name?>" rows="3" cols="35"><?=form_prep($item->{$field->name})?></textarea>
+<?php elseif ($field->type == 'tinyint' && $field->max_length == 1): ?>
+ <input type="checkbox" name="<?=$field->name?>" value="1"<?=$item->{$field->name} == 1 ? " checked" : ""?>>
+<?php else: ?>
  <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?> value="<?=form_prep($item->{$field->name})?>"/>
  <?php
  if (array_key_exists($field->name, $refs)) {
@@ -28,8 +33,6 @@
    echo '</div>';
  }
  ?>
-<?php else: ?>
- <textarea name="<?=$field->name?>" rows="3" cols="35"><?=form_prep($item->{$field->name})?></textarea>
 <?php endif; ?>
 </p>
 <?php endif; endforeach; ?>

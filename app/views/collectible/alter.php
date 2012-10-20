@@ -23,6 +23,7 @@
    <option value="varchar">text (short)</option>
    <option value="text">text (long)</option>
    <option value="date">date</option>
+   <option value="boolean">boolean</option>
   </select>
  </p>
  <p><a href="#" id="newAttribute">new attribute</a></p>

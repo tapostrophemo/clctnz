@@ -13,7 +13,11 @@
 <?php foreach ($fields as $field): if ($field->name != 'id'): ?>
 <p>
  <label><?=strtolower(humanize($field->name))?></label><br/>
-<?php if ($field->type != 'text'): ?>
+<?php if ($field->type == 'text'): ?>
+ <textarea name="<?=$field->name?>" rows="3" cols="35"></textarea>
+<?php elseif ($field->type == 'tinyint' && $field->max_length == 1): ?>
+ <input type="checkbox" name="<?=$field->name?>" value="1">
+<?php else: ?>
  <input type="text" name="<?=$field->name?>" <?=$field->type == 'int' ? 'size="9"' : '';?>/>
  <?php
  if (array_key_exists($field->name, $refs)) {
@@ -23,8 +27,6 @@
    echo '</div>';
  }
  ?>
-<?php else: ?>
- <textarea name="<?=$field->name?>" rows="3" cols="35"></textarea>
 <?php endif; ?>
 </p>
 <?php endif; endforeach; ?>
