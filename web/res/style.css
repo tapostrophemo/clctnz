@@ -52,9 +52,13 @@ tr:hover {
   background-color: #f3f3f3;
 }
 
+th {
+  text-align: left;
+}
+
 td {
   vertical-align: top;
-  padding: 5px 0 5px 0;
+  padding: 3px 15px 3px 0;
 }
 
 /** borrowed from CI, then modified **/
