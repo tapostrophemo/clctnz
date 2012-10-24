@@ -74,10 +74,5 @@ class Collectible extends CI_Controller
     $this->dbforge->drop_table($collectible);
     redirect('/');
   }
-
-  function items() {
-    $tables = $this->CollectionApp->getTables();
-    $this->load->view('data', array('tables' => $tables));
-  }
 }
 
