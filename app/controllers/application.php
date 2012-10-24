@@ -15,10 +15,15 @@ function getFile($path) {
 
 class Application extends CI_Controller
 {
-  function export() {
+  function __construct() {
+    parent::__construct();
     $this->load->model('CollectionApp');
-    $collectibles = $this->CollectionApp->getTables();
-    $code = $this->generateCode($collectibles);
+  }
+
+  function export() {
+    $cols = $this->CollectionApp->getTables();
+    $ops = $this->CollectionApp->getOperations();
+    $code = $this->generateCode($cols, $ops);
     if ($this->input->post('to_file') == true) {
       $this->downloadAsZip($code);
     }
@@ -27,7 +32,7 @@ class Application extends CI_Controller
     }
   }
 
-  private function generateCode($collectibles) {
+  private function generateCode($collectibles, $operations) {
     $code = array();
 
     $config = array();
@@ -55,11 +60,26 @@ class Application extends CI_Controller
       $code[] = array('name' => "app/views/${collectible}/edit.php", 'code' => getTemplate('views/items/edit.php', $collectible));
     }
 
-    $sql = array();
+    $sql = array("-- setup");
     foreach ($collectibles as $collectible) {
-      $sql[] = $this->CollectionApp->getSql($collectible);
+      $s = $this->CollectionApp->getSql($collectible);
+      $sql[] = preg_replace("/AUTO_INCREMENT=\d+ /", "", $s);
+    }
+    $sql[] = "\n\n-- triggers";
+    foreach ($this->db->query('show triggers')->result() as $trigger) {
+      $spec = $this->db->query('show create trigger ' . $trigger->Trigger)->row();
+      $osql = $spec->{'SQL Original Statement'};
+      $sql[] = preg_replace("/CREATE DEFINER=.* TRIGGER/", 'CREATE TRIGGER', $osql);
     }
     $code[] = array('name' => 'sql/setup.sql', 'code' => join($sql, ";\n\n") . ';');
+    $ops = array();
+    foreach ($operations as $op) {
+      $s = $this->CollectionApp->getOperation($op->id)->sql_text;
+      $ss = preg_replace("/\n/", "\\n", $s);
+      $ops[] = "/*\n-- {$op->name}\n" . $s . "\n*/";
+      $ops[] = "INSERT INTO _clctnz_operations(name, sql_text) VALUES('{$op->name}', '{$ss}');\n";
+    }
+    $code[] = array('name' => 'sql/operations.sql', 'code' => join($ops, "\n\n"));
     $code[] = array('name' => 'sql/teardown.sql', 'code' => "DROP TABLE IF EXISTS\n  " . join($collectibles, ",\n  ") . ';');
 
     $code[] = array('name' => 'web/index.php', 'code' => getTemplate('../web/index.php'));
@@ -127,6 +147,32 @@ class Application extends CI_Controller
       }
       $this->load->view('footer');
     }
+  }
+
+  function operation() {
+    if (!$this->form_validation->run('operation')) {
+      $this->load->view('ops');
+    }
+    else {
+      $this->CollectionApp->saveOperation($this->input->post('name'), $this->input->post('sql_text'));
+      redirect('/');
+    }
+  }
+
+  function operation_alter($id) {
+    if (!$this->form_validation->run('operation')) {
+      $op = $this->CollectionApp->getOperation($id);
+      $this->load->view('op', array('op' => $op));
+    }
+    else {
+      $this->CollectionApp->updateOperation($id, $this->input->post('name'), $this->input->post('sql_text'));
+      redirect('/');
+    }
+  }
+
+  function operation_delete($id) {
+    $this->CollectionApp->deleteOperation($id);
+    redirect('/');
   }
 }
 

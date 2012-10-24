@@ -17,6 +17,11 @@ $config = array(
     array('field' => 'collectible_name', 'label' => 'collectible name', 'rules' => 'trim|required|max_length[64]|xss_clean'),
   ),
 
+  'operation' => array(
+    array('field' => 'name', 'label' => 'operation name', 'rules' => 'trim|required|max_length[255]'),
+    array('field' => 'sql_text', 'label' => 'SQL text', 'rules' => 'trim|required'),
+  ),
+
   'item_save' => array(
     array('field' => 'junk', 'label' => '', 'rules' => 'callback_item_save_valid'),
   ),

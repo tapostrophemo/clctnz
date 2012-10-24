@@ -2,13 +2,22 @@
 
 <h2>menu</h2>
 
-<h3>collections</h3>
-<ul>
+<h3>collections / operations</h3>
+<ul class="multicol">
  <li><a href="/collectible/define">Define collectible</a></li>
 <?php foreach ($collectibles as $collectible): $name = strtolower(humanize($collectible)) ?>
  <li><a href="/collectible/alter/<?=$collectible?>">Alter '<?=$name?>' table</a></li>
 <?php endforeach; ?>
 </ul>
+
+<ul class="multicol">
+ <li><a href="/application/operation">Define operation</a></li>
+<?php foreach ($operations as $op): ?>
+ <li><a href="/application/operation_alter/<?=$op->id?>">Alter '<?=$op->name?>' operation</a></li>
+<?php endforeach; ?>
+</ul>
+
+<div style="clear:both"></div>
 
 <h3>items</h3>
 <ul>
