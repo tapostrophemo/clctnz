@@ -93,8 +93,19 @@ class Application extends CI_Controller
   function reset() {
     require APPPATH.'config/database.php'; // NB: I wish CI had a way to access these in a less-hacky way
     $this->load->dbforge();
+
     $this->dbforge->drop_database($db['default']['database']);
     $this->dbforge->create_database($db['default']['database']);
+    $this->db->close();
+
+    $this->load->database();
+    $this->dbforge->add_field('id');
+    $this->dbforge->add_field(array(
+      'name' => array('type' => 'varchar', 'constraint' => 255),
+      'sql_text' => array('type' => 'text'),
+    ));
+    $this->dbforge->create_table('_clctnz_operations');
+
     redirect('/');
   }
 

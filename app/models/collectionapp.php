@@ -3,7 +3,11 @@
 class CollectionApp extends CI_Model
 {
   function getTables() {
-    return $this->db->list_tables();
+    return array_filter($this->db->list_tables(), array($this, 'isReservedTable'));
+  }
+
+  private function isReservedTable($name) {
+    return !in_array($name, array('_clctnz_operations'));
   }
 
   function getSql($collectible) {
