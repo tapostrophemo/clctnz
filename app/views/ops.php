@@ -12,7 +12,7 @@
 
 <p><label>Operation name</label> <input type="text" name="name"/></p>
 <p><label>SQL</label><br/><textarea name="sql_text" rows="5" cols="65"></textarea></p>
-<p><input type="submit"/></p>
+<p><input type="submit" value="save definition"/></p>
 </form>
 
 <?php $this->load->view('footer'); ?>
