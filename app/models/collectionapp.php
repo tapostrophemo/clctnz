@@ -16,19 +16,19 @@ class CollectionApp extends CI_Model
   }
 
   function getOperations() {
-    return $this->db->select(array('id', 'name'))->get('_clctnz_operations')->result();
+    return $this->db->select(array('id', 'role', 'name'))->get('_clctnz_operations')->result();
   }
 
   function getOperation($id) {
     return $this->db->where('id', $id)->get('_clctnz_operations')->row();
   }
 
-  function saveOperation($name, $sqlText) {
-    $this->db->insert('_clctnz_operations', array('name' => $name, 'sql_text' => $sqlText));
+  function saveOperation($role, $name, $sqlText) {
+    $this->db->insert('_clctnz_operations', array('role' => $role, 'name' => $name, 'sql_text' => $sqlText));
   }
 
-  function updateOperation($id, $name, $sqlText) {
-    $this->db->where('id', $id)->update('_clctnz_operations', array('name' => $name, 'sql_text' => $sqlText));
+  function updateOperation($id, $role, $name, $sqlText) {
+    $this->db->where('id', $id)->update('_clctnz_operations', array('name' => $name, 'role' => $role, 'sql_text' => $sqlText));
   }
 
   function deleteOperation($id) {

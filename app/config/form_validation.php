@@ -18,6 +18,7 @@ $config = array(
   ),
 
   'operation' => array(
+    array('field' => 'role', 'label' => 'role', 'rules' => 'trim|max_length[255]'),
     array('field' => 'name', 'label' => 'operation name', 'rules' => 'trim|required|max_length[255]'),
     array('field' => 'sql_text', 'label' => 'SQL text', 'rules' => 'trim|required'),
   ),
