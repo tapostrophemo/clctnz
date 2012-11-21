@@ -14,12 +14,12 @@
 <?=validation_errors()?>
 
 <p>
- <label>role</label><br/>
- <input type="text" name="role"/>
-</p>
-<p>
  <label>operation name</label><br/>
  <input type="text" name="name"/>
+</p>
+<p>
+ <label>role</label><br/>
+ <input type="text" name="role"/>
 </p>
 <p>
  <label>sql</label><br/>

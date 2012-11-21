@@ -77,7 +77,7 @@ class Application extends CI_Controller
       $s = $this->CollectionApp->getOperation($op->id)->sql_text;
       $ss = preg_replace("/\n/", "\\n", $s);
       $ops[] = "/*\n-- {$op->name}\n" . $s . "\n*/";
-      $ops[] = "INSERT INTO _clctnz_operations(role, name, sql_text) VALUES('{$op->role}', '{$op->name}', '{$ss}');\n";
+      $ops[] = "INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('{$op->name}', '{$op->role}', '{$ss}');\n";
     }
     $code[] = array('name' => 'sql/operations.sql', 'code' => join($ops, "\n\n"));
     $code[] = array('name' => 'sql/teardown.sql', 'code' => "DROP TABLE IF EXISTS\n  " . join($collectibles, ",\n  ") . ';');
@@ -123,8 +123,8 @@ class Application extends CI_Controller
 
     $this->dbforge->add_field('id');
     $this->dbforge->add_field(array(
-      'role' => array('type' => 'varchar', 'constraint' => 255),
       'name' => array('type' => 'varchar', 'constraint' => 255),
+      'role' => array('type' => 'varchar', 'constraint' => 255),
       'sql_text' => array('type' => 'text'),
     ));
     $this->dbforge->create_table('_clctnz_operations');
@@ -158,8 +158,8 @@ class Application extends CI_Controller
     }
     else {
       $this->CollectionApp->saveOperation(
-        $this->input->post('role'),
         $this->input->post('name'),
+        $this->input->post('role'),
         $this->input->post('sql_text'));
       redirect('/');
     }
@@ -173,8 +173,8 @@ class Application extends CI_Controller
     else {
       $this->CollectionApp->updateOperation(
         $id,
-        $this->input->post('role'),
         $this->input->post('name'),
+        $this->input->post('role'),
         $this->input->post('sql_text'));
       redirect('/');
     }

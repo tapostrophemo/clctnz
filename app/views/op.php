@@ -14,12 +14,12 @@
 <?=validation_errors()?>
 
 <p>
- <label>role</label><br/>
- <input type="text" name="role" value="<?=set_value('role', $op->role)?>"/>
-</p>
-<p>
  <label>operation name</label><br/>
  <input type="text" name="name" value="<?=set_value('name', $op->name)?>"/>
+</p>
+<p>
+ <label>role</label><br/>
+ <input type="text" name="role" value="<?=set_value('role', $op->role)?>"/>
 </p>
 <p>
  <label>sql</label><br/>
