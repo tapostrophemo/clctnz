@@ -35,17 +35,21 @@ class Application extends CI_Controller
   private function generateCode($collectibles, $operations) {
     $code = array();
 
+    $code[] = array('name' => "app/config/autoload.php", 'code' => "<?php // TODO: generate 'app/config/autoload.php' using application name as main model name, helpers/etc.");
+    $code[] = array('name' => "app/config/database.php", 'code' => "<?php // TODO: generate 'app/config/database.php'");
     $config = array();
     foreach ($collectibles as $collectible) {
       $config[] = "  '${collectible}_save' => array(array('field' => 'junk', 'label' => '', 'rules' => 'callback_${collectible}_save_valid')),";
     }
     $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/form_validation.php', join($config, "\n")));
-    $code[] = array('name' => 'app/config/routes.php', 'code' => getTemplate('views/templates/routes.php'));
+    $code[] = array('name' => 'app/config/routes.php', 'code' => "<?php // TODO: generate this with the main application controller name\n?>\n" . getTemplate('views/templates/routes.php'));
 
     foreach ($collectibles as $collectible) {
       $code[] = array('name' => "app/controllers/${collectible}.php", 'code' => getTemplate('views/templates/controller.php', $collectible));
     }
     $code[] = array('name' => 'app/controllers/site.php', 'code' => getTemplate('views/templates/site_controller.php'));
+
+    $code[] = array('name' => 'app/models/APP_MAIN_MODEL_NAME.php', 'code' => "<?php // TODO: generate main model for thisi application");
 
     $code[] = array('name' => 'app/views/header.php', 'code' => getTemplate('views/header.php'));
     $code[] = array(
@@ -90,23 +94,53 @@ class Application extends CI_Controller
 
   private function downloadAsZip($code) {
     $this->load->library('zip');
-    foreach ($code as $c) {
-      $this->zip->add_data('application/'.$c['name'], $c['code']);
+
+    $this->zip->read_dir(BASEPATH.'../../lib/', false);
+    // want 'lib' to be in 'application/lib'
+    $t = tempnam('/tmp', '_clctnz_');
+    $this->zip->archive($t);
+    shell_exec("mkdir -p /tmp/foo/application");
+    shell_exec("unzip -d /tmp/foo $t");
+    shell_exec("mv /tmp/foo/lib /tmp/foo/application");
+    $this->zip->clear_data();
+    $this->zip->read_dir('/tmp/foo/application/', false);
+    shell_exec("rm -rf /tmp/foo");
+    unlink($t);
+
+    $copies = array(
+      'config/config.php',
+      'config/constants.php',
+      'config/doctypes.php',
+      'config/foreign_chars.php',
+      'config/hooks.php',
+      'config/migration.php',
+      'config/mimes.php',
+      'config/profiler.php',
+      'config/smileys.php',
+      'config/user_agents.php',
+      'errors/error_404.php',
+      'errors/error_db.php',
+      'errors/error_general.php',
+      'errors/error_php.php');
+    foreach ($copies as $c) {
+      $this->zip->add_data('application/app/'.$c, getFile($c));
     }
     $this->zip->add_dir(array(
       'application/app/cache',
       'application/app/core',
-      'application/app/errors',
       'application/app/helpers',
       'application/app/hooks',
       'application/app/language/english',
       'application/app/libraries',
       'application/app/logs',
-      'application/app/models',
       'application/app/third_party',
-      'application/lib',
       'application/test',
       'application/web/res'));
+
+    foreach ($code as $c) {
+      $this->zip->add_data('application/'.$c['name'], $c['code']);
+    }
+
     $this->zip->download('application.zip');
   }
 

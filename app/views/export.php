@@ -6,6 +6,8 @@
  <p>This page alows you to export all current collectibles as an application.</p>
 </div>
 
+<p><em>Note:</em> Required library dependencies are not displayed on this page, but will be included in the download package.</p>
+
 <p>
  <a href="#" id="toggleAll">Toggle all files</a>
  &nbsp;
