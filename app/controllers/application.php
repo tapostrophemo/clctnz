@@ -51,13 +51,14 @@ class Application extends CI_Controller
 
     $code[] = array('name' => 'app/models/APP_MAIN_MODEL_NAME.php', 'code' => "<?php // TODO: generate main model for thisi application");
 
-    $code[] = array('name' => 'app/views/header.php', 'code' => getTemplate('views/header.php'));
+    $appData = $this->CollectionApp->getHeaderFooter();
+    $code[] = array('name' => 'app/views/header.php', 'code' => $appData->header);
     $code[] = array(
       'name' => 'app/views/menu.php',
       'code' => "<?php \$this->view(\"header\"); ?>\n" .
                 $this->load->view('templates/menu', array('collectibles' => $collectibles), true) .
                 '<?php $this->view("footer"); ?>');
-    $code[] = array('name' => 'app/views/footer.php', 'code' => getTemplate('views/footer.php'));
+    $code[] = array('name' => 'app/views/footer.php', 'code' => $appData->footer);
     foreach ($collectibles as $collectible) {
       $code[] = array('name' => "app/views/${collectible}/all.php", 'code' => getTemplate('views/items/all.php', $collectible));
       $code[] = array('name' => "app/views/${collectible}/add.php", 'code' => getTemplate('views/items/add.php', $collectible));
@@ -163,6 +164,13 @@ class Application extends CI_Controller
     ));
     $this->dbforge->create_table('_clctnz_operations');
 
+    $this->dbforge->add_field('id');
+    $this->dbforge->add_field(array(
+      'header' => array('type' => 'text'),
+      'footer' => array('type' => 'text'),
+    ));
+    $this->dbforge->create_table('_clctnz_application');
+
     redirect('/');
   }
 
@@ -217,6 +225,20 @@ class Application extends CI_Controller
   function operation_delete($id) {
     $this->CollectionApp->deleteOperation($id);
     redirect('/');
+  }
+
+  function header_footer() {
+    if (!$this->form_validation->run('header_footer')) {
+      $appData = $this->CollectionApp->getHeaderFooter();
+      $data = array(
+        'header' => isset($appData->header) ? $appData->header : '',
+        'footer' => isset($appData->footer) ? $appData->footer : '');
+      $this->load->view('application/header_footer', $data);
+    }
+    else {
+      $this->CollectionApp->updateHeaderFooter($this->input->post('header'), $this->input->post('footer'));
+      redirect('/');
+    }
   }
 }
 

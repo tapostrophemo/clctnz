@@ -23,6 +23,11 @@ $config = array(
     array('field' => 'sql_text', 'label' => 'SQL text', 'rules' => 'trim|required'),
   ),
 
+  'header_footer' => array(
+    array('field' => 'header', 'label' => 'header (HTML)', 'rules' => 'trim|required'),
+    array('field' => 'footer', 'label' => 'footer (HTML)', 'rules' => 'trim|required'),
+  ),
+
   'item_save' => array(
     array('field' => 'junk', 'label' => '', 'rules' => 'callback_item_save_valid'),
   ),

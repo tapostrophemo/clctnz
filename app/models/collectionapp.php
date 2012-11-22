@@ -7,7 +7,7 @@ class CollectionApp extends CI_Model
   }
 
   private function isReservedTable($name) {
-    return !in_array($name, array('_clctnz_operations'));
+    return !in_array($name, array('_clctnz_operations', '_clctnz_application'));
   }
 
   function getSql($collectible) {
@@ -33,6 +33,14 @@ class CollectionApp extends CI_Model
 
   function deleteOperation($id) {
     $this->db->where('id', $id)->delete('_clctnz_operations');
+  }
+
+  function getHeaderFooter() {
+    return $this->db->where('id', 1)->get('_clctnz_application')->row();
+  }
+
+  function updateHeaderFooter($header, $footer) {
+    $this->db->query('REPLACE INTO _clctnz_application (id, header, footer) VALUES (1, ?, ?)', array($header, $footer));
   }
 }
 
