@@ -89,6 +89,8 @@ class Application extends CI_Controller
 
     $code[] = array('name' => 'web/index.php', 'code' => getTemplate('../web/index.php'));
     $code[] = array('name' => 'web/.htaccess', 'code' => getTemplate('../web/.htaccess'));
+    $appData = $this->CollectionApp->getStyle();
+    $code[] = array('name' => 'web/res/style.css', 'code' => $appData->style);
 
     return $code;
   }
@@ -164,12 +166,13 @@ class Application extends CI_Controller
     ));
     $this->dbforge->create_table('_clctnz_operations');
 
-    $this->dbforge->add_field('id');
     $this->dbforge->add_field(array(
-      'header' => array('type' => 'text'),
-      'footer' => array('type' => 'text'),
+      'name' => array('type' => 'varchar', 'constraint' => 255),
+      'value' => array('type' => 'text', 'null' => true),
     ));
+    $this->dbforge->add_key('name', true);
     $this->dbforge->create_table('_clctnz_application');
+    $this->db->query("INSERT INTO _clctnz_application (name) VALUES ('header'), ('footer'), ('style')");
 
     redirect('/');
   }
@@ -230,13 +233,21 @@ class Application extends CI_Controller
   function header_footer() {
     if (!$this->form_validation->run('header_footer')) {
       $appData = $this->CollectionApp->getHeaderFooter();
-      $data = array(
-        'header' => isset($appData->header) ? $appData->header : '',
-        'footer' => isset($appData->footer) ? $appData->footer : '');
-      $this->load->view('application/header_footer', $data);
+      $this->load->view('application/header_footer', array('header' => $appData->header, 'footer' => $appData->footer));
     }
     else {
       $this->CollectionApp->updateHeaderFooter($this->input->post('header'), $this->input->post('footer'));
+      redirect('/');
+    }
+  }
+
+  function style() {
+    if (!$this->form_validation->run('style')) {
+      $appData = $this->CollectionApp->getStyle();
+      $this->load->view('application/style', array('style' => $appData->style));
+    }
+    else {
+      $this->CollectionApp->updateStyle($this->input->post('style'));
       redirect('/');
     }
   }

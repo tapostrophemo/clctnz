@@ -36,11 +36,28 @@ class CollectionApp extends CI_Model
   }
 
   function getHeaderFooter() {
-    return $this->db->where('id', 1)->get('_clctnz_application')->row();
+    $sql = "
+      SELECT IfNull(value, '') AS value FROM _clctnz_application WHERE name = 'header'
+      UNION ALL
+      SELECT IfNull(value, '') AS value FROM _clctnz_application WHERE name = 'footer'";
+    $result = $this->db->query($sql)->result();
+    $hf = new stdClass;
+    $hf->header = $result[0]->value;
+    $hf->footer = $result[1]->value;
+    return $hf;
   }
 
   function updateHeaderFooter($header, $footer) {
-    $this->db->query('REPLACE INTO _clctnz_application (id, header, footer) VALUES (1, ?, ?)', array($header, $footer));
+    $this->db->query("UPDATE _clctnz_application SET value = ? WHERE name = 'header'", $header);
+    $this->db->query("UPDATE _clctnz_application SET value = ? WHERE name = 'footer'", $footer);
+  }
+
+  function getStyle() {
+    return $this->db->query("SELECT IfNull(value, '') AS style FROM _clctnz_application WHERE name = 'style'")->row();
+  }
+
+  function updateStyle($style) {
+    $this->db->query("UPDATE _clctnz_application SET value = ? WHERE name = 'style'", $style);
   }
 }
 

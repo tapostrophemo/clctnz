@@ -43,6 +43,7 @@
   <a href="/application/import">Import</a>
  </li>
  <li><a href="/application/header_footer">Set header/footer</a></li>
+ <li><a href="/application/style">Set style</a></li>
  <li><a href="/application/reset">Reset</a></li>
 </ul>
 

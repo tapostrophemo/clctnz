@@ -28,6 +28,10 @@ $config = array(
     array('field' => 'footer', 'label' => 'footer (HTML)', 'rules' => 'trim|required'),
   ),
 
+  'style' => array(
+    array('field' => 'style', 'label' => 'style (CSS)', 'rules' => 'trim|required'),
+  ),
+
   'item_save' => array(
     array('field' => 'junk', 'label' => '', 'rules' => 'callback_item_save_valid'),
   ),
