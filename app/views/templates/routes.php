@@ -39,6 +39,7 @@
 */
 
 $route['default_controller'] = 'site';
+$collectible
 $route['404_override'] = '';
 
 
