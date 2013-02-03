@@ -3,7 +3,7 @@
 <?php endif; ?>
 
 <div id="footer">
- <p>Copyright &copy; 2011, 2012, Dan Parks. All Rights Reserved.</p>
+ <p>Copyright &copy; 2011 - 2013, Dan Parks. All Rights Reserved.</p>
 </div>
 
 <script type="text/javascript">

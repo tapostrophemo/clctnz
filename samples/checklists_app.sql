@@ -42,12 +42,26 @@ UPDATE `_clctnz_application` SET `value` = 'STYLE HERE' WHERE `name` = 'style';
 
 -- test data;
 
-INSERT INTO `checklists` (name) VALUES ('go camping');
+INSERT INTO `checklists` (name) VALUES
+ ('go camping'),
+ ('things to do with an empty aluminum can');
+
 INSERT INTO `items` (checklist_id, name) VALUES
  (1,'pick a spot'),
  (1,'pack your gear'),
  (1,'enjoy the trip'),
- (1,'clean and put away your stuff');
+ (1,'clean and put away your stuff'),
+ (2,'make a radio'),
+ (2,'make a model boat'),
+ (2,'make art'),
+ (2,'make jewelry'),
+ (2,'make a chandelier'),
+ (2,'use for shingles on a roof or siding'),
+ (2,'make a christmas tree'),
+ (2,'make christmas ornaments'),
+ (2,'make origami'),
+ (2,'make a robot'),
+ (2,'make a guitar amplifier');
 
 
 -- teardown;
