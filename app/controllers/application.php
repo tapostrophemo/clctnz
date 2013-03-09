@@ -1,4 +1,5 @@
 <?php
+require_once(APPPATH.'../lib/PHP-SQL-Parser/php-sql-parser.php');
 
 function getTemplate($path, $replacement = null) {
   if (!$replacement) {
@@ -13,42 +14,18 @@ function getFile($path) {
   return file_get_contents(APPPATH.$path);
 }
 
-function parseSql($sql) {
-  $args = '';
-  $params = '';
-
-  if (preg_match('/INSERT INTO .* \(([^\)]+)\) /i', $sql, $matches)) {
-    $args = $params = '$' . str_replace(', ', ', $', $matches[1]);
-  }
-  elseif (preg_match('/UPDATE .* SET /i', $sql)) {
-    // TODO: handle multiple values, criteria?
-
-    // simple example: UPDATE checklists SET name = ? WHERE id = ?
-    // part1 = 'name = ?'
-    // part2 = 'id = ?'
-    list($part1, $part2) = explode('WHERE', explode('SET', $sql)[1]);
-    // TODO: stop hardcoding this!!
-    $args = '$key, $value';
-    $params = '$value, $key';
-  }
-  elseif (preg_match('/DELETE FROM .* WHERE (.+) = ?/', $sql, $matches)) {
-    $args = $params = '$' . $matches[1];
-  }
-
-  return array($args, $params);
-}
-
 class Application extends CI_Controller
 {
   function __construct() {
     parent::__construct();
     $this->load->model('CollectionApp');
+    $this->load->helper('controller_gen');
   }
 
   function export() {
-    $cols = $this->CollectionApp->getTables();
-    $ops = $this->CollectionApp->getOperations();
-    $code = $this->generateCode($cols, $ops);
+    $collections = $this->CollectionApp->getTables();
+    $operations = $this->CollectionApp->getOperations();
+    $code = $this->generateCode($collections, $operations);
     if ($this->input->post('to_file') == true) {
       $this->downloadAsZip($code);
     }
@@ -57,48 +34,43 @@ class Application extends CI_Controller
     }
   }
 
-  private function generateController() {
-    $operations = $this->CollectionApp->getOperations();
+  private function generateController($operations) {
     $methods = array();
     foreach ($operations as $op) {
       $oop = $this->CollectionApp->getOperation($op->id);
-      $methods[] = $this->load->view('templates/controller_fragment', array('op' => $oop), true);
+      $methods[] = $this->load->view('templates/app/controllers/controller_fragment', array('op' => $oop), true);
     }
-    return getTemplate('views/templates/application_controller.php', implode("\n", $methods));
+    return getTemplate('views/templates/app/controllers/application.php', implode("\n", $methods));
+  }
+
+  private function generateModel() {
+    return getTemplate('views/templates/app/models/model.php');
   }
 
   private function generateCode($collectibles, $operations) {
     $code = array();
 
-    $code[] = array('name' => "app/config/autoload.php", 'code' => "<?php // TODO: generate 'app/config/autoload.php' using application name as main model name, helpers/etc.");
-    $code[] = array('name' => "app/config/database.php", 'code' => "<?php // TODO: generate 'app/config/database.php'");
+    $code[] = array('name' => "app/config/autoload.php", 'code' => getTemplate('views/templates/app/config/autoload.php', "'Model'"));
+    $code[] = array('name' => "app/config/database.php", 'code' => getTemplate('views/templates/app/config/database.php'));
     $config = array();
-    foreach ($collectibles as $collectible) {
-      $config[] = "  '${collectible}_save' => array(array('field' => 'junk', 'label' => '', 'rules' => 'callback_${collectible}_save_valid')),";
+//$config[] = print_r($operations, true);
+    foreach ($operations as $op) {
+      $name = str_replace(' ', '_', $op->name);
+      $config[] = "  '$name' => array('field' => 'TODO', 'label' => 'TODO', 'rules' => 'TODO')),";
     }
-    $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/form_validation.php', join($config, "\n")));
+    $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/app/config/form_validation.php', join($config, "\n")));
 
-    $operations = $this->CollectionApp->getOperations();
-    $routes = $this->load->view('templates/route_fragment', array('operations' => $operations), true);
-    $code[] = array('name' => 'app/config/routes.php', 'code' => getTemplate('views/templates/routes.php', $routes));
+    $routes = $this->load->view('templates/app/config/route_fragment', array('operations' => $operations), true);
+    $code[] = array('name' => 'app/config/routes.php', 'code' => getTemplate('views/templates/app/config/routes.php', $routes));
     $code[] = array('name' => 'app/controllers/application.php', 'code' => $this->generateController($operations));
-    $code[] = array('name' => 'app/controllers/site.php', 'code' => getTemplate('views/templates/site_controller.php'));
-    //$code[] = array('name' => 'app/models/model.php', 'code' => $this->generateModel());
-    // NB: bypassing Model for now by putting all the DB stuff in the 'operation' in app controller
+    $code[] = array('name' => 'app/controllers/site.php', 'code' => getTemplate('views/templates/app/controllers/site.php'));
+    $code[] = array('name' => 'app/models/model.php', 'code' => $this->generateModel());
+    // NB: Model empty for now; putting all the DB stuff in the 'operation' in app controller
 
     $appData = $this->CollectionApp->getHeaderFooter();
     $code[] = array('name' => 'app/views/header.php', 'code' => $appData->header);
-    $code[] = array(
-      'name' => 'app/views/menu.php',
-      'code' => "<?php \$this->view(\"header\"); ?>\n" .
-                $this->load->view('templates/menu', array('collectibles' => $collectibles), true) .
-                '<?php $this->view("footer"); ?>');
+    $code[] = array('name' => 'app/views/menu.php', 'code' => $this->load->view('templates/app/views/menu', array('operations' => $operations), true));
     $code[] = array('name' => 'app/views/footer.php', 'code' => $appData->footer);
-    foreach ($collectibles as $collectible) {
-      $code[] = array('name' => "app/views/${collectible}/all.php", 'code' => getTemplate('views/items/all.php', $collectible));
-      $code[] = array('name' => "app/views/${collectible}/add.php", 'code' => getTemplate('views/items/add.php', $collectible));
-      $code[] = array('name' => "app/views/${collectible}/edit.php", 'code' => getTemplate('views/items/edit.php', $collectible));
-    }
 
     $sql = array("-- setup");
     foreach ($collectibles as $collectible) {
