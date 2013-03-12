@@ -2,7 +2,7 @@
 
 /********************************************************************************/
 function roleCheck($role) {
-  if (!empty($role)): ?>if ($this->session->userdata('role') != '<?=$role?>')) {
+  if (!empty($role)): ?>if ($this->session->userdata('role') != '<?=$role?>') {
       $this->session->set_flashdata('err', 'Unauthorized!');
       redirect('/');
     }
@@ -64,7 +64,7 @@ function generateFromDelete($parser, $name, $sql, $role = '') {
     <?php validationCheck($name); ?>
     else {
       $<?=$where?> = $this->input->post('<?=$where?>');
-      $this->db->query('<?=$sql?>'), array($<?=$where?>));
+      $this->db->query('<?=$sql?>', array($<?=$where?>));
     }
   }
 <?php

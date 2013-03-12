@@ -56,7 +56,7 @@ class Application extends CI_Controller
 //$config[] = print_r($operations, true);
     foreach ($operations as $op) {
       $name = str_replace(' ', '_', $op->name);
-      $config[] = "  '$name' => array('field' => 'TODO', 'label' => 'TODO', 'rules' => 'TODO')),";
+      $config[] = "  '$name' => array('field' => 'TODO', 'label' => 'TODO', 'rules' => 'TODO'),";
     }
     $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/app/config/form_validation.php', join($config, "\n")));
 
