@@ -48,12 +48,16 @@ class Application extends CI_Controller
   }
 
   private function generateCode($collectibles, $operations) {
-    $code = array();
+    $this->load->library('parser');
 
     $code[] = array('name' => "app/config/autoload.php", 'code' => getTemplate('views/templates/app/config/autoload.php', "'Model'"));
+    $parseData = array(
+      'base_url' => 'http://app.local', // TODO: ask user for this value...DB connection info (below) too
+      'encryption_key' => rand(),
+      '::' => ''); // clever way to get around all the PHP config/code being elided into nothing...
+    $code[] = array('name' => "app/config/config.php", 'code' => $this->parser->parse('templates/app/config/config', $parseData, true));
     $code[] = array('name' => "app/config/database.php", 'code' => getTemplate('views/templates/app/config/database.php'));
     $config = array();
-//$config[] = print_r($operations, true);
     foreach ($operations as $op) {
       $name = str_replace(' ', '_', $op->name);
       $config[] = "  '$name' => array('field' => 'TODO', 'label' => 'TODO', 'rules' => 'TODO'),";
@@ -118,7 +122,6 @@ class Application extends CI_Controller
     unlink($t);
 
     $copies = array(
-      'config/config.php',
       'config/constants.php',
       'config/doctypes.php',
       'config/foreign_chars.php',
