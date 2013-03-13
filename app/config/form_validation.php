@@ -23,6 +23,13 @@ $config = array(
     array('field' => 'sql_text', 'label' => 'SQL text', 'rules' => 'trim|required'),
   ),
 
+  'database_settings' => array(
+    array('field' => 'hostname', 'label' => 'Hostname', 'rules' => 'trim|required'),
+    array('field' => 'username', 'label' => 'Username', 'rules' => 'trim|required'),
+    array('field' => 'password', 'label' => 'Password', 'rules' => 'trim|required'),
+    array('field' => 'database', 'label' => 'Database', 'rules' => 'trim|required'),
+  ),
+
   'header_footer' => array(
     array('field' => 'header', 'label' => 'header (HTML)', 'rules' => 'trim|required'),
     array('field' => 'footer', 'label' => 'footer (HTML)', 'rules' => 'trim|required'),

@@ -52,15 +52,23 @@ class Application extends CI_Controller
 
     $code[] = array('name' => "app/config/autoload.php", 'code' => getTemplate('views/templates/app/config/autoload.php', "'Model'"));
     $parseData = array(
-      'base_url' => 'http://app.local', // TODO: ask user for this value...DB connection info (below) too
+      'base_url' => 'http://app.local', // TODO: ask user for this value
       'encryption_key' => rand(),
       '::' => ''); // clever way to get around all the PHP config/code being elided into nothing...
     $code[] = array('name' => "app/config/config.php", 'code' => $this->parser->parse('templates/app/config/config', $parseData, true));
-    $code[] = array('name' => "app/config/database.php", 'code' => getTemplate('views/templates/app/config/database.php'));
+    $dbData = $this->CollectionApp->getDatabaseSettings();
+    $parseData = array(
+      'hostname' => $dbData['hostname'],
+      'username' => $dbData['username'],
+      'password' => $dbData['password'],
+      'database' => $dbData['database'],
+      '::' => '');
+    $code[] = array('name' => 'app/config/database.php', 'code' => $this->parser->parse('templates/app/config/database', $parseData, true));
     $config = array();
     foreach ($operations as $op) {
       $name = str_replace(' ', '_', $op->name);
       $config[] = "  '$name' => array('field' => 'TODO', 'label' => 'TODO', 'rules' => 'TODO'),";
+      $code[] = array('name' => "app/views/$name.php", 'code' => "TODO: create view for operation $name");
     }
     $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/app/config/form_validation.php', join($config, "\n")));
 
@@ -182,7 +190,10 @@ class Application extends CI_Controller
     ));
     $this->dbforge->add_key('name', true);
     $this->dbforge->create_table('_clctnz_application');
-    $this->db->query("INSERT INTO _clctnz_application (name) VALUES ('header'), ('footer'), ('style')");
+    $this->db->query("
+      INSERT INTO _clctnz_application (name)
+      VALUES ('header'), ('footer'), ('style'),
+             ('db_hostname'), ('db_username'), ('db_password'), ('db_database')");
 
     redirect('/');
   }
@@ -238,6 +249,21 @@ class Application extends CI_Controller
   function operation_delete($id) {
     $this->CollectionApp->deleteOperation($id);
     redirect('/');
+  }
+
+  function database() {
+    if (!$this->form_validation->run('database_settings')) {
+      $dbData = $this->CollectionApp->getDatabaseSettings();
+      $this->load->view('application/database_settings', $dbData);
+    }
+    else {
+      $this->CollectionApp->updateDatabaseSettings(
+        $this->input->post('hostname'),
+        $this->input->post('username'),
+        $this->input->post('password'),
+        $this->input->post('database'));
+      redirect('/');
+    }
   }
 
   function header_footer() {

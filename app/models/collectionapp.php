@@ -35,6 +35,30 @@ class CollectionApp extends CI_Model
     $this->db->where('id', $id)->delete('_clctnz_operations');
   }
 
+  function getDatabaseSettings() {
+    $sql = "
+      SELECT IfNull(value, '') AS value FROM _clctnz_application WHERE name = 'db_hostname'
+      UNION ALL
+      SELECT IfNull(value, '') AS value FROM _clctnz_application WHERE name = 'db_username'
+      UNION ALL
+      SELECT IfNull(value, '') AS value FROM _clctnz_application WHERE name = 'db_password'
+      UNION ALL
+      SELECT IfNull(value, '') AS value FROM _clctnz_application WHERE name = 'db_database'";
+    $result = $this->db->query($sql)->result();
+    return array(
+      'hostname' => $result[0]->value,
+      'username' => $result[1]->value,
+      'password' => $result[2]->value,
+      'database' => $result[3]->value);
+  }
+
+  function updateDatabaseSettings($hostname, $username, $password, $database) {
+    $this->db->query("UPDATE _clctnz_application SET value = ? WHERE name = 'db_hostname'", $hostname);
+    $this->db->query("UPDATE _clctnz_application SET value = ? WHERE name = 'db_username'", $username);
+    $this->db->query("UPDATE _clctnz_application SET value = ? WHERE name = 'db_password'", $password);
+    $this->db->query("UPDATE _clctnz_application SET value = ? WHERE name = 'db_database'", $database);
+  }
+
   function getHeaderFooter() {
     $sql = "
       SELECT IfNull(value, '') AS value FROM _clctnz_application WHERE name = 'header'

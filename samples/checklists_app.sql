@@ -38,6 +38,10 @@ INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('delete item', '', '
 UPDATE `_clctnz_application` SET `value` = 'FOOTER HERE' WHERE `name` = 'footer';
 UPDATE `_clctnz_application` SET `value` = 'HEADER HERE' WHERE `name` = 'header';
 UPDATE `_clctnz_application` SET `value` = 'STYLE HERE' WHERE `name` = 'style';
+UPDATE `_clctnz_application` SET `value` = 'localhost' WHERE `name` = 'db_hostname';
+UPDATE `_clctnz_application` SET `value` = 'app_owner' WHERE `name` = 'db_username';
+UPDATE `_clctnz_application` SET `value` = 'app_password' WHERE `name` = 'db_password';
+UPDATE `_clctnz_application` SET `value` = 'app_database' WHERE `name` = 'db_database';
 
 
 -- test data;

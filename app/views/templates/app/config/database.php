@@ -1,12 +1,12 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<{::}?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'app_owner';
-$db['default']['password'] = 'password';
-$db['default']['database'] = 'application';
+$db['default']['hostname'] = '{hostname}';
+$db['default']['username'] = '{username}';
+$db['default']['password'] = '{password}';
+$db['default']['database'] = '{database}';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
