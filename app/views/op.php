@@ -25,6 +25,12 @@
  <label>sql</label><br/>
  <textarea name="sql_text" rows="5" cols="65"><?=set_value('sql_text', $op->sql_text)?></textarea>
 </p>
+<p>
+ <label>has view?</label><br/>
+ no: <input type="radio" name="has_view" value="0" <?=set_radio('has_view', 'checked', $op->has_view == 0)?>>&nbsp;&nbsp;&nbsp;
+ yes: <input type="radio" name="has_view" value="1" <?=set_radio('has_view', 'checked', $op->has_view == 1)?>><br/>
+ <textarea name="view_code" rows="5" cols="65"><?=set_value('view_code', $op->view_code)?></textarea>
+</p>
 <input type="submit" value="alter definition"/>
 </form>
 

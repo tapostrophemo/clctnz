@@ -21,6 +21,8 @@ $config = array(
     array('field' => 'role', 'label' => 'role', 'rules' => 'trim|max_length[255]'),
     array('field' => 'name', 'label' => 'operation name', 'rules' => 'trim|required|max_length[255]'),
     array('field' => 'sql_text', 'label' => 'SQL text', 'rules' => 'trim|required'),
+    array('field' => 'has_view', 'label' => 'has view', 'rules' => 'is_natural|required'),
+    array('field' => 'view_code', 'label' => 'view code', 'rules' => 'trim'),
   ),
 
   'database_settings' => array(

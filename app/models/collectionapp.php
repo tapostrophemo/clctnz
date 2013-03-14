@@ -16,19 +16,29 @@ class CollectionApp extends CI_Model
   }
 
   function getOperations() {
-    return $this->db->select(array('id', 'name', 'role'))->get('_clctnz_operations')->result();
+    return $this->db->select(array('id', 'name', 'role', 'has_view'))->get('_clctnz_operations')->result();
   }
 
   function getOperation($id) {
     return $this->db->where('id', $id)->get('_clctnz_operations')->row();
   }
 
-  function saveOperation($name, $role, $sqlText) {
-    $this->db->insert('_clctnz_operations', array('name' => $name, 'role' => $role, 'sql_text' => $sqlText));
+  function saveOperation($name, $role, $sqlText, $hasView, $viewCode) {
+    $this->db->insert('_clctnz_operations', array(
+      'name' => $name,
+      'role' => $role,
+      'sql_text' => $sqlText,
+      'has_view' => $hasView,
+      'view_code' => $viewCode));
   }
 
-  function updateOperation($id, $name, $role, $sqlText) {
-    $this->db->where('id', $id)->update('_clctnz_operations', array('name' => $name, 'role' => $role, 'sql_text' => $sqlText));
+  function updateOperation($id, $name, $role, $sqlText, $hasView, $viewCode) {
+    $this->db->where('id', $id)->update('_clctnz_operations', array(
+      'name' => $name,
+      'role' => $role,
+      'sql_text' => $sqlText,
+      'has_view' => $hasView,
+      'view_code' => $viewCode));
   }
 
   function deleteOperation($id) {

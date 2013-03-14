@@ -68,7 +68,6 @@ class Application extends CI_Controller
     foreach ($operations as $op) {
       $name = str_replace(' ', '_', $op->name);
       $config[] = "  '$name' => array('field' => 'TODO', 'label' => 'TODO', 'rules' => 'TODO'),";
-      $code[] = array('name' => "app/views/$name.php", 'code' => "TODO: create view for operation $name");
     }
     $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/app/config/form_validation.php', join($config, "\n")));
 
@@ -98,10 +97,14 @@ class Application extends CI_Controller
     $code[] = array('name' => 'sql/setup.sql', 'code' => join($sql, ";\n\n") . ';');
     $ops = array();
     foreach ($operations as $op) {
-      $s = $this->CollectionApp->getOperation($op->id)->sql_text;
+      $o = $this->CollectionApp->getOperation($op->id);
+      $s = $o->sql_text;
       $ss = preg_replace("/\n/", "\\n", $s);
       $ops[] = "/*\n-- {$op->name}\n" . $s . "\n*/";
       $ops[] = "INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('{$op->name}', '{$op->role}', '{$ss}');\n";
+
+      $name = str_replace(' ', '_', $op->name);
+      $code[] = array('name' => "app/views/$name.php", 'code' => ($op->has_view == 1 ? $o->view_code : "TODO: create view for operation $name"));
     }
     $code[] = array('name' => 'sql/operations.sql', 'code' => join($ops, "\n\n"));
     $code[] = array('name' => 'sql/teardown.sql', 'code' => "DROP TABLE IF EXISTS\n  " . join($collectibles, ",\n  ") . ';');
@@ -181,6 +184,8 @@ class Application extends CI_Controller
       'name' => array('type' => 'varchar', 'constraint' => 255),
       'role' => array('type' => 'varchar', 'constraint' => 255),
       'sql_text' => array('type' => 'text'),
+      'has_view' => array('type' => 'tinyint'),
+      'view_code' => array('type' => 'text'),
     ));
     $this->dbforge->create_table('_clctnz_operations');
 
@@ -226,7 +231,9 @@ class Application extends CI_Controller
       $this->CollectionApp->saveOperation(
         $this->input->post('name'),
         $this->input->post('role'),
-        $this->input->post('sql_text'));
+        $this->input->post('sql_text'),
+        $this->input->post('has_view'),
+        $this->input->post('view_code'));
       redirect('/');
     }
   }
@@ -241,7 +248,9 @@ class Application extends CI_Controller
         $id,
         $this->input->post('name'),
         $this->input->post('role'),
-        $this->input->post('sql_text'));
+        $this->input->post('sql_text'),
+        $this->input->post('has_view'),
+        $this->input->post('view_code'));
       redirect('/');
     }
   }

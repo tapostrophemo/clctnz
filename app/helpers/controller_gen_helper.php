@@ -89,3 +89,16 @@ function generateFromMulti($name, $sqls, $role = '') {
   }
 <?php
 }
+
+/********************************************************************************/
+function generateFromSelect($parser, $name, $sql, $role = '') {
+  $items = $parser->parsed['FROM'][0]['table'];
+?>
+  function <?=$name?>() {
+    <?php roleCheck($role); ?>
+
+    $<?=$items?> = $this->db->query('<?=$sql?>')->result();
+    $this->load->view('<?=$name?>', array('<?=$items?>' => $<?=$items?>));
+  }
+<?php
+}
