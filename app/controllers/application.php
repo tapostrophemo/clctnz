@@ -100,8 +100,9 @@ class Application extends CI_Controller
       $o = $this->CollectionApp->getOperation($op->id);
       $s = $o->sql_text;
       $ss = preg_replace("/\n/", "\\n", $s);
+      $vc = preg_replace("/\n/", "\\n", $o->view_code);
       $ops[] = "/*\n-- {$op->name}\n" . $s . "\n*/";
-      $ops[] = "INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('{$op->name}', '{$op->role}', '{$ss}');\n";
+      $ops[] = "INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('{$op->name}', '{$op->role}', '{$ss}', $op->has_view, '{$vc}');\n";
 
       $name = str_replace(' ', '_', $op->name);
       $code[] = array('name' => "app/views/$name.php", 'code' => ($op->has_view == 1 ? $o->view_code : "TODO: create view for operation $name"));
@@ -210,7 +211,7 @@ class Application extends CI_Controller
     else {
       $this->load->view('header');
       $this->output->append_output('<h2>import</h2>');
-      $sqls = explode(';', $this->input->post('sql'));
+      $sqls = preg_split("/;\n/", $this->input->post('sql'));
       foreach ($sqls as $sql) {
         $sql = trim($sql);
         if ($sql == "") continue;

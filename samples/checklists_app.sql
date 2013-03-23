@@ -24,13 +24,14 @@ FOR EACH ROW
 
 -- operations;
 
-INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('create checklist', '', 'INSERT INTO checklists (name) VALUES (?)');
-INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('edit checklist', '', 'UPDATE checklists SET name = ? WHERE id = ?');
-INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('delete checklist', '', 'DELETE FROM items WHERE checklist_id = ?\nDELETE FROM checklists WHERE id = ?');
-INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('create item', '', 'INSERT INTO items (checklist_id, name) VALUES (?, ?)');
-INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('edit item', '', 'UPDATE items SET name = ? WHERE id = ?');
-INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('reorder item', '', 'UPDATE items SET seq = ? WHERE id = ?');
-INSERT INTO _clctnz_operations(name, role, sql_text) VALUES('delete item', '', 'DELETE FROM items WHERE id = ?');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('create checklist', '', 'INSERT INTO checklists (name) VALUES (?)', 0, '');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('edit checklist', '', 'UPDATE checklists SET name = ? WHERE id = ?', 0, '');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('delete checklist', '', 'DELETE FROM items WHERE checklist_id = ?\nDELETE FROM checklists WHERE id = ?', 0, '');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('create item', '', 'INSERT INTO items (checklist_id, name) VALUES (?, ?)', 0, '');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('edit item', '', 'UPDATE items SET name = ? WHERE id = ?', 0, '');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('reorder item', '', 'UPDATE items SET seq = ? WHERE id = ?', 0, '');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('delete item', '', 'DELETE FROM items WHERE id = ?', 0, '');
+INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('get checklists', '', 'SELECT * FROM checklists', 1, '<?php $this->view("header"); ?>\n\n<ul>\n<?php foreach ($checklists as $c): ?>\n <li><a href="/get_checklist/<?=$c->id?>"><?=$c->name?></a></li>\n<?php endforeach; ?>\n</ul>\n\n<?php $this->view("footer"); ?>');
 
 
 -- application settings;
