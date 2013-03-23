@@ -4,7 +4,7 @@
 
 <ul>
 <?php foreach ($operations as $operation): $name = str_replace(' ', '_', $operation->name) ?>
- <li><a href="/<?=$name?>"><?=$operation->name?></a></li>
+ <li><a href="/application/<?=$name?>"><?=$operation->name?></a></li>
 <?php endforeach; ?>
 </ul>
 

@@ -12,7 +12,12 @@ if (!is_array($sql)) {
   if (isset($p->parsed['INSERT'])) generateFromInsert($p, $name, $sql, $op->role);
   if (isset($p->parsed['UPDATE'])) generateFromUpdate($p, $name, $sql, $op->role);
   if (isset($p->parsed['DELETE'])) generateFromDelete($p, $name, $sql, $op->role);
-  if (isset($p->parsed['SELECT'])) generateFromSelect($p, $name, $sql, $op->role);
+  if (isset($p->parsed['SELECT'])) {
+    if (isset($p->parsed['WHERE']))
+      generateFromSelectWhere($p, $name, $sql, $op->role);
+    else
+      generateFromSelect($p, $name, $sql, $op->role);
+  }
 }
 else {
   generateFromMulti($name, $sql, $op->role);

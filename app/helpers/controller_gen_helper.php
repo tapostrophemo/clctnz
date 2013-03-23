@@ -102,3 +102,18 @@ function generateFromSelect($parser, $name, $sql, $role = '') {
   }
 <?php
 }
+
+/********************************************************************************/
+function generateFromSelectWhere($parser, $name, $sql, $role = '') {
+  // TODO: loop over where-criteria
+  $items = $parser->parsed['FROM'][0]['table'];
+  $where = $parser->parsed['WHERE'][0]['base_expr'];
+?>
+  function <?=$name?>($<?=$where?>) {
+    <?php roleCheck($role); ?>
+
+    $<?=$items?> = $this->db->query('<?=$sql?>', array($<?=$where?>))->result();
+    $this->load->view('<?=$name?>', array('<?=$items?>' => $<?=$items?>));
+  }
+<?php
+}

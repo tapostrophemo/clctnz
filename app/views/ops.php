@@ -22,6 +22,11 @@
  <input type="text" name="role"/>
 </p>
 <p>
+ <label>main menu?</label><br/>
+ no: <input type="radio" name="main_menu" value="0">&nbsp;&nbsp;&nbsp;
+ yes: <input type="radio" name="main_menu" value="1">
+</p>
+<p>
  <label>sql</label><br/>
  <textarea name="sql_text" rows="5" cols="65"></textarea>
 </p>

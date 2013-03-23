@@ -2,5 +2,3 @@
 
 $route['default_controller'] = 'site';
 $route['404_override'] = '';
-
-$collectible

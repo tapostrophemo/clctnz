@@ -71,8 +71,7 @@ class Application extends CI_Controller
     }
     $code[] = array('name' => "app/config/form_validation.php", 'code' => getTemplate('views/templates/app/config/form_validation.php', join($config, "\n")));
 
-    $routes = $this->load->view('templates/app/config/route_fragment', array('operations' => $operations), true);
-    $code[] = array('name' => 'app/config/routes.php', 'code' => getTemplate('views/templates/app/config/routes.php', $routes));
+    $code[] = array('name' => 'app/config/routes.php', 'code' => getTemplate('views/templates/app/config/routes.php'));
     $code[] = array('name' => 'app/controllers/application.php', 'code' => $this->generateController($operations));
     $code[] = array('name' => 'app/controllers/site.php', 'code' => getTemplate('views/templates/app/controllers/site.php'));
     $code[] = array('name' => 'app/models/model.php', 'code' => $this->generateModel());
@@ -80,7 +79,11 @@ class Application extends CI_Controller
 
     $appData = $this->CollectionApp->getHeaderFooter();
     $code[] = array('name' => 'app/views/header.php', 'code' => $appData->header);
-    $code[] = array('name' => 'app/views/menu.php', 'code' => $this->load->view('templates/app/views/menu', array('operations' => $operations), true));
+    $menuOperations = array();
+    foreach ($operations as $op) {
+      if ($op->main_menu) $menuOperations[] = $op;
+    }
+    $code[] = array('name' => 'app/views/menu.php', 'code' => $this->load->view('templates/app/views/menu', array('operations' => $menuOperations), true));
     $code[] = array('name' => 'app/views/footer.php', 'code' => $appData->footer);
 
     $sql = array("-- setup");
@@ -102,7 +105,7 @@ class Application extends CI_Controller
       $ss = preg_replace("/\n/", "\\n", $s);
       $vc = preg_replace("/\n/", "\\n", $o->view_code);
       $ops[] = "/*\n-- {$op->name}\n" . $s . "\n*/";
-      $ops[] = "INSERT INTO _clctnz_operations(name, role, sql_text, has_view, view_code) VALUES('{$op->name}', '{$op->role}', '{$ss}', $op->has_view, '{$vc}');\n";
+      $ops[] = "INSERT INTO _clctnz_operations(name, role, main_menu, sql_text, has_view, view_code) VALUES('{$op->name}', '{$op->role}', $op->main_menu, '{$ss}', $op->has_view, '{$vc}');\n";
 
       $name = str_replace(' ', '_', $op->name);
       $code[] = array('name' => "app/views/$name.php", 'code' => ($op->has_view == 1 ? $o->view_code : "TODO: create view for operation $name"));
@@ -184,6 +187,7 @@ class Application extends CI_Controller
     $this->dbforge->add_field(array(
       'name' => array('type' => 'varchar', 'constraint' => 255),
       'role' => array('type' => 'varchar', 'constraint' => 255),
+      'main_menu' => array('type' => 'tinyint'),
       'sql_text' => array('type' => 'text'),
       'has_view' => array('type' => 'tinyint'),
       'view_code' => array('type' => 'text'),
@@ -232,6 +236,7 @@ class Application extends CI_Controller
       $this->CollectionApp->saveOperation(
         $this->input->post('name'),
         $this->input->post('role'),
+        $this->input->post('main_menu'),
         $this->input->post('sql_text'),
         $this->input->post('has_view'),
         $this->input->post('view_code'));
@@ -249,6 +254,7 @@ class Application extends CI_Controller
         $id,
         $this->input->post('name'),
         $this->input->post('role'),
+        $this->input->post('main_menu'),
         $this->input->post('sql_text'),
         $this->input->post('has_view'),
         $this->input->post('view_code'));
